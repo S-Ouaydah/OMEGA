@@ -8,18 +8,15 @@ import java.awt.event.ActionListener;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class ProjectView extends JFrame {
-    private JTextField projectNameInput;
-    private JButton addProject;
-    private JPanel projectPanel;
-    private JList list1;
+    private final JTextField projectNameInput = new JTextField(20);
+    private final JButton addProject = new JButton("Add Project");
+    private final JPanel projectPanel = new JPanel(new BorderLayout());
     private JList<String> projectList;
     private DefaultListModel<String> projectListModel;
 
     public ProjectView() {
         // Initialize the DefaultListModel and the JList with it
-        projectListModel = new DefaultListModel<>();
-        projectList = new JList<>(projectListModel);
-
+        createUIComponents();
         addProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,12 +49,12 @@ public class ProjectView extends JFrame {
     }
 
     private void createUIComponents() {
-        // Create the JList and set its model
         projectListModel = new DefaultListModel<>();
         projectList = new JList<>(projectListModel);
 
         // Add components to the projectPanel
         JPanel inputPanel = new JPanel();
+        inputPanel.add(new JLabel("Project Name: "));
         inputPanel.add(projectNameInput);
         inputPanel.add(addProject);
 
@@ -68,7 +65,6 @@ public class ProjectView extends JFrame {
 
     public static void main(String[] args) {
         ProjectView frame = new ProjectView();
-        frame.createUIComponents();
         frame.setTitle("Project View");
         frame.setContentPane(frame.projectPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
