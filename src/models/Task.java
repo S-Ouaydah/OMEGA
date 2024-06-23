@@ -1,7 +1,10 @@
+package models;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task {
+public class Task implements Serializable {
     private String id; // Unique identifier for the task
     private String taskType; // Type of the task (design, preparation, fabrication, assembly, testing)
     private List<Process> processes; // List of processes associated with the task
@@ -68,8 +71,8 @@ public class Task {
         return processes;
     }
 
-//    public static List<Task> getTasksFromUI() {
-//        List<Task> tasks = new ArrayList<>();
+//    public static List<models.Task> getTasksFromUI() {
+//        List<models.Task> tasks = new ArrayList<>();
 //        // Add tasks from UI to the list
 //
 //        return tasks;

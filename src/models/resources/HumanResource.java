@@ -1,21 +1,19 @@
-// Human Resource class
-public class HumanResource extends Resource {
-    private String specialty; // Employee's specialty
+package models.resources;
+
+import java.io.Serializable;
+
+public class HumanResource extends Resource implements Serializable {
     private String role; // Employee's role
     private double hourlyRate; // Employee's hourly rate
 
     // Constructor
-    public HumanResource(String id, String name, String specialty, String role, double hourlyRate) {
+    public HumanResource(String id, String name, String role, double hourlyRate) {
         super(id, name);
-        this.specialty = specialty;
         this.role = role;
         this.hourlyRate = hourlyRate;
     }
 
-    // Getters for specialty, role, and hourlyRate
-    public String getSpecialty() {
-        return specialty;
-    }
+    // Getters for role, and hourlyRate
 
     public String getRole() {
         return role;

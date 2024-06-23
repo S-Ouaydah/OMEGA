@@ -1,5 +1,9 @@
-// Material Resource class
-public class MaterialResource extends Resource {
+package models.resources;
+
+import java.io.Serializable;
+
+// Material models.resources.Resource class
+public class MaterialResource extends Resource implements Serializable {
     private double unitCost; // Cost per unit of the material
 
     // Constructor
@@ -15,7 +19,6 @@ public class MaterialResource extends Resource {
 
     @Override
     public double getCost(int quantity) {
-        // Calculate cost based on unit cost
         return unitCost * quantity;
     }
 }

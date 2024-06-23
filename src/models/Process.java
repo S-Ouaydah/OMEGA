@@ -1,22 +1,29 @@
+package models;
+
+import models.resources.Resource;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Process {
+public class Process implements Serializable {
     private int id; // Unique identifier for the process
     private String name; // Name of the process
     private List<Resource> resources; // List of resources assigned to the process
     private double cost; // Cost of the process
     private String status; // Current status of the process ("In Progress", "Completed")
     private int duration; // Estimated duration of the process in days
+    private String taskType; // Type of the task (design, preparation, fabrication, assembly, testing)
 
     // Constructor
-    public Process(int id, String name) {
+    public Process(int id, String name, String taskType) {
         this.id = id;
         this.name = name;
         this.resources = new ArrayList<>();
         this.cost = 0;
         this.status = "In Progress";
         this.duration = 0;
+        this.taskType = taskType;
     }
     public Process(int id, String name, String status ,int duration, double cost) {
         this.id = id;

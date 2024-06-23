@@ -1,3 +1,10 @@
+package views;
+
+import models.resources.*;
+import models.Process;
+import models.Project;
+import models.Task;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -10,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProjectListView extends JFrame {
+public class ProjectFormView extends JFrame {
 
     private JTextField projectNameField;
     private JTextField customerField;
@@ -18,7 +25,7 @@ public class ProjectListView extends JFrame {
     private JLabel prototypeImageLabel;
     private JTabbedPane tasksTabbedPane;
 
-    public ProjectListView() {
+    private JPanel createMainPanel() {
         setTitle("Project Form");
         setSize(800, 600);
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,8 +34,9 @@ public class ProjectListView extends JFrame {
         // Create project details panel
         JPanel projectDetailsPanel = new JPanel(new BorderLayout());
         projectDetailsPanel.setBorder(BorderFactory.createTitledBorder("Project Details"));
-
-        // Create prototype image panel
+        return projectDetailsPanel;
+    }
+    private JPanel createImagePanel() {
         JPanel imagePanel = new JPanel(new BorderLayout());
         prototypeImageLabel = new JLabel();
         prototypeImageLabel.setPreferredSize(new Dimension(200, 200));
@@ -36,6 +44,7 @@ public class ProjectListView extends JFrame {
         imagePanel.add(prototypeImageLabel, BorderLayout.CENTER);
 
         JButton uploadImageButton = new JButton("Upload Image");
+        imagePanel.add(uploadImageButton, BorderLayout.SOUTH);
         uploadImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,9 +57,9 @@ public class ProjectListView extends JFrame {
                 }
             }
         });
-        imagePanel.add(uploadImageButton, BorderLayout.SOUTH);
-
-        // Create details form panel
+        return imagePanel;
+    }
+    private JPanel createDetailsPanel() {
         JPanel detailsFormPanel = new JPanel(new GridLayout(3, 4, 5, 5));
 
         detailsFormPanel.add(new JLabel("Project Name:"));
@@ -65,24 +74,7 @@ public class ProjectListView extends JFrame {
         dateField = new JTextField(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
         detailsFormPanel.add(dateField);
 
-        projectDetailsPanel.add(imagePanel, BorderLayout.WEST);
-        projectDetailsPanel.add(detailsFormPanel, BorderLayout.CENTER);
-
-        add(projectDetailsPanel, BorderLayout.NORTH);
-
-        // Create tasks tabbed pane
-        tasksTabbedPane = new JTabbedPane();
-        String[] taskNames = {"Conception", "Preparation", "Fabrication", "Assembly", "Testing"};
-
-        for (String taskName : taskNames) {
-            tasksTabbedPane.addTab(taskName, createTaskPanel(taskName));
-        }
-
-        add(tasksTabbedPane, BorderLayout.CENTER);
-
-        // Load saved project data on startup
-        loadProjectData("st2.data");
-        setVisible(true);
+        return detailsFormPanel;
     }
 
     private JPanel createTaskPanel(String taskName) {
@@ -164,7 +156,7 @@ public class ProjectListView extends JFrame {
 
                 System.out.println("Project saved successfully!");
 
-                dispose(); // Close ProjectListView after saving
+                dispose(); // Close views.ProjectListView after saving
 
             } catch (IOException ex){
                 System.out.println("Error saving project data!");
@@ -258,6 +250,10 @@ public class ProjectListView extends JFrame {
     private void loadProjectData(String fileName) {
         try {
                 Project projectData = Project.readFromFile(fileName);
+                System.out.println(projectData);
+                System.out.println(projectData.getProjectName());
+                System.out.println(projectData.getCustomer());
+                System.out.println(projectData.getTasks());
                 projectNameField.setText(projectData.getProjectName());
                 customerField.setText(projectData.getCustomer());
                 dateField.setText(projectData.getDate().format(DateTimeFormatter.ISO_DATE));
@@ -309,8 +305,34 @@ public class ProjectListView extends JFrame {
 //            ex.printStackTrace();
 //        }
 //    }
+
+    public ProjectFormView() {
+        JPanel mainPanel = createMainPanel();
+
+        JPanel imagePanel = createImagePanel();
+        JPanel detailsFormPanel = createDetailsPanel();
+
+        mainPanel.add(imagePanel, BorderLayout.WEST);
+        mainPanel.add(detailsFormPanel, BorderLayout.CENTER);
+
+        add(mainPanel, BorderLayout.NORTH);
+
+        // Create tasks tabbed pane
+        tasksTabbedPane = new JTabbedPane();
+        String[] taskNames = {"Conception", "Preparation", "Fabrication", "Assembly", "Testing"};
+
+        for (String taskName : taskNames) {
+            tasksTabbedPane.addTab(taskName, createTaskPanel(taskName));
+        }
+
+        add(tasksTabbedPane, BorderLayout.CENTER);
+
+        // Load saved project data on startup
+        loadProjectData("ProtoKarim.data");
+        setVisible(true);
+    }
     public static void main(String[] args) {
-        new ProjectListView();
+        new ProjectFormView();
 
     }
 }

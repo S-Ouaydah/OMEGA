@@ -1,12 +1,13 @@
+package models;
+
 import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Project implements Serializable{
 
     @Serial
-    private static final long serialVersionUID = 2641829790221971234L; // Use the serialVersionUID from the error message
+    private static final long serialVersionUID = 1;
     private int id;
     private String state;
     private double cost;
@@ -14,14 +15,12 @@ public class Project implements Serializable{
     private String customer;
     private LocalDate date;
     private List<Task> tasks;
-    private String[][] processData;
 
 
     public Project(String projectName, String customer, LocalDate date) {
         this.projectName = projectName;
         this.customer = customer;
         this.date = date;
-        this.processData = new String[0][]; // Initialize empty process data
     }
 
     //Getters and setters
@@ -50,12 +49,20 @@ public class Project implements Serializable{
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
     public void writeToFile(String fileName) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
-        outputStream.writeObject(this);
-        outputStream.close();
+        System.out.println("Writing to file...");
+        System.out.println(this.projectName);
+        System.out.println(this.customer);
+        System.out.println(this.tasks);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+            ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+            outputStream.writeObject(this);
+            outputStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Project readFromFile(String fileName) throws IOException, ClassNotFoundException {

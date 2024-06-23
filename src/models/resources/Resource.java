@@ -1,4 +1,8 @@
-public abstract class Resource {
+package models.resources;
+
+import java.io.Serializable;
+
+public abstract class Resource implements Serializable{
     protected String id; // Unique identifier for the resource
     protected String name; // Name of the resource
 

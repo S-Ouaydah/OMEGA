@@ -1,18 +1,18 @@
+package views;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-public class HomeView extends JFrame {
+public class ProjectListView extends JFrame {
 
     private JTable projectTable;
     private JButton newProjectButton;
 
-    public HomeView() {
+    public ProjectListView() {
         setTitle("Project Management");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +44,7 @@ public class HomeView extends JFrame {
         // Create new project button
         newProjectButton = new JButton("New Project");
         newProjectButton.addActionListener(e -> {
-            new ProjectListView().setVisible(true); // Create and show new ProjectListView
+            new ProjectFormView().setVisible(true); // Create and show new views.ProjectListView
         });
 
         JPanel buttonPanel = new JPanel();
@@ -83,11 +83,11 @@ public class HomeView extends JFrame {
     private void openProject(String projectName) {
         // Implement logic to open an existing project from a file
         // You can load the serialized Project data from the corresponding file
-        // and populate the ProjectListView with the loaded data
+        // and populate the views.ProjectListView with the loaded data
         System.out.println("Opening project: " + projectName); // Placeholder for actual logic
     }
 
     public static void main(String[] args) {
-        new HomeView();
+        new ProjectListView();
     }
 }
