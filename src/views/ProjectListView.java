@@ -1,5 +1,7 @@
 package views;
 
+import models.Project;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -44,7 +46,7 @@ public class ProjectListView extends JFrame {
         // Create new project button
         newProjectButton = new JButton("New Project");
         newProjectButton.addActionListener(e -> {
-            new ProjectFormView().setVisible(true); // Create and show new views.ProjectListView
+            new ProjectFormView(new Project()).setVisible(true); // Create and show new views.ProjectListView
         });
 
         JPanel buttonPanel = new JPanel();

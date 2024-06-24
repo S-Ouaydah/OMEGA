@@ -95,12 +95,15 @@ public class ProjectFormView extends JFrame {
             }
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 1; // Disable editing for (Process ID)
+                return column == 0 || column == 2; // Disable editing for (Process ID)
             }
         };
-        processTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple row selection
+//        processTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple row selection
 
         // Add some dummy data for illustration purposes
+//        foreach process : taskName.getProcesses() {
+//            tableModel.addRow(new Object[]{false, process.getId(), process.getName(), process.getStatus(), process.getCost(), process.getDuration()});
+//        }
         tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
         tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
 
@@ -146,10 +149,10 @@ public class ProjectFormView extends JFrame {
                 );
 
                 // Get tasks from the UI
-                List<Task> tasks = getTasksFromUI();
+//                List<Task> tasks = getTasksFromUI();
 
                 // Add tasks to the project
-                projectData.setTasks(tasks);
+//                projectData.setTasks(tasks);
 
                 // Write project data to the specified file
                 projectData.writeToFile(fileName);
@@ -178,29 +181,29 @@ public class ProjectFormView extends JFrame {
 
         return taskPanel;
     }
-    private List<Task> getTasksFromUI() {
-        List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
-            JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
-            String taskType = tasksTabbedPane.getTitleAt(i);
-
-            // Extract process data from the task panel
-            JTable processTable = findProcessTable(taskPanel); // Find the JTable within the panel
-
-            // Only proceed if a process table is found
-            if (processTable != null) {
-                List<Process> processes = getProcessesFromTable(processTable);
-
-                // Only add the task if it has at least one selected process
-                if (!processes.isEmpty()) {
-                    Task task = new Task(taskType); // Assuming Task still uses a String type
-                    task.setProcesses(processes);
-                    tasks.add(task);
-                }
-            }
-        }
-        return tasks;
-    }
+//    private List<Task> getTasksFromUI() {
+//        List<Task> tasks = new ArrayList<>();
+//        for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
+//            JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
+//            String taskType = tasksTabbedPane.getTitleAt(i);
+//
+//            // Extract process data from the task panel
+//            JTable processTable = findProcessTable(taskPanel); // Find the JTable within the panel
+//
+//            // Only proceed if a process table is found
+//            if (processTable != null) {
+//                List<Process> processes = getProcessesFromTable(processTable);
+//
+//                // Only add the task if it has at least one selected process
+//                if (!processes.isEmpty()) {
+//                    Task task = new Task(taskType); // Assuming Task still uses a String type
+//                    task.setProcesses(processes);
+//                    tasks.add(task);
+//                }
+//            }
+//        }
+//        return tasks;
+//    }
 
     private JTable findProcessTable(JPanel panel) {
         for (int i = 0; i < panel.getComponentCount(); i++) {
@@ -291,22 +294,7 @@ public class ProjectFormView extends JFrame {
         }
     }
 
-    //    private void loadProjectData(String fileName) {
-//        try {
-//            Project projectData = Project.readFromFile(fileName);
-//            projectNameField.setText(projectData.getProjectName());
-//            customerField.setText(projectData.getCustomer());
-//            dateField.setText(projectData.getDate().format(DateTimeFormatter.ISO_DATE));
-//
-//            System.out.println("Project loaded successfully!");
-//
-//        } catch (IOException | ClassNotFoundException ex) {
-//            System.out.println("Error loading project data!");
-//            ex.printStackTrace();
-//        }
-//    }
-
-    public ProjectFormView() {
+    public ProjectFormView(Project projectData) {
         JPanel mainPanel = createMainPanel();
 
         JPanel imagePanel = createImagePanel();
@@ -319,20 +307,21 @@ public class ProjectFormView extends JFrame {
 
         // Create tasks tabbed pane
         tasksTabbedPane = new JTabbedPane();
-        String[] taskNames = {"Conception", "Preparation", "Fabrication", "Assembly", "Testing"};
-
-        for (String taskName : taskNames) {
-            tasksTabbedPane.addTab(taskName, createTaskPanel(taskName));
+        List<Task> projectTasks = projectData.getTasks();
+        if (projectTasks!=null) {
+            for (Task task : projectTasks) {
+                tasksTabbedPane.addTab(task.getType().toString(), createTaskPanel(task.getType().name()));
+            }
         }
 
         add(tasksTabbedPane, BorderLayout.CENTER);
 
         // Load saved project data on startup
-        loadProjectData("ProtoKarim.data");
+        loadProjectData("tass.data");
         setVisible(true);
     }
     public static void main(String[] args) {
-        new ProjectFormView();
+        new ProjectFormView(new Project());
 
     }
 }

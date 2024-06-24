@@ -1,5 +1,8 @@
 package views;
 
+import models.Process;
+import models.Project;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -8,7 +11,7 @@ public class ProcessFormView extends JFrame {
     private JTable resourcesTable;
     private JButton newResourceButton;
     private JTabbedPane resourcesTabbedPane;
-    public ProcessFormView() {
+    public ProcessFormView(Process process) {
         setTitle("OMEGA: Process Form");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +35,7 @@ public class ProcessFormView extends JFrame {
         // Create new project button
         newResourceButton = new JButton("Process");
         newResourceButton.addActionListener(e -> {
-            new ProjectFormView().setVisible(true); // Create and show new views.ProjectListView
+            new ProcessFormView(new Process()).setVisible(true); // Create and show new views.ProjectListView
         });
 
         JPanel buttonPanel = new JPanel();
@@ -79,6 +82,6 @@ public class ProcessFormView extends JFrame {
     }
 
     public static void main(String[] args) {
-        new ProcessFormView();
+        new ProcessFormView(new Process());
     }
 }

@@ -1,5 +1,6 @@
 package models;
 
+import models.resources.MaterialResource;
 import models.resources.Resource;
 
 import java.io.Serializable;
@@ -16,6 +17,12 @@ public class Process implements Serializable {
     private String taskType; // Type of the task (design, preparation, fabrication, assembly, testing)
 
     // Constructor
+    public Process() {
+        this.resources = new ArrayList<>();
+        this.cost = 0;
+        this.status = "In Progress";
+        this.duration = 0;
+    }
     public Process(int id, String name, String taskType) {
         this.id = id;
         this.name = name;

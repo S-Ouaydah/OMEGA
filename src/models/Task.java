@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Task implements Serializable {
+
+    public enum Type {
+        Design, Preparation, Fabrication, Assembly, Testing
+    }
     private String id; // Unique identifier for the task
-    private String taskType; // Type of the task (design, preparation, fabrication, assembly, testing)
+    private Type taskType; // Type of the task (design, preparation, fabrication, assembly, testing)
     private List<Process> processes; // List of processes associated with the task
     private double cost; // Total cost of the task
     private String status; // Current status of the task (e.g., "In Progress", "Completed")
@@ -14,7 +18,7 @@ public class Task implements Serializable {
 
     // Constructor
     // todo: fix id
-    public Task(String type) {
+    public Task(Type type) {
 //        this.id = id;
         this.taskType = type;
         this.processes = new ArrayList<>();
@@ -63,12 +67,16 @@ public class Task implements Serializable {
         }
     }
 
-    public String getType() {
+    public Type getType() {
         return taskType;
     }
 
     public List<Process> getProcesses() {
         return processes;
+    }
+
+    public static List<Task> getAllTypes() {
+        return new ArrayList<>(List.of(new Task(Type.Design), new Task(Type.Preparation), new Task(Type.Fabrication), new Task(Type.Assembly), new Task(Type.Testing)));
     }
 
 //    public static List<models.Task> getTasksFromUI() {

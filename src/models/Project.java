@@ -2,25 +2,34 @@ package models;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Project implements Serializable{
-
+    public enum State {
+        Pending, In_Progress, Completed
+    }
     @Serial
     private static final long serialVersionUID = 1;
-    private int id;
-    private String state;
     private double cost;
+    private State state;
     private String projectName;
     private String customer;
     private LocalDate date;
     private List<Task> tasks;
 
-
+    public Project() {
+        this.state = State.Pending;
+        this.tasks = Task.getAllTypes();
+    }
     public Project(String projectName, String customer, LocalDate date) {
         this.projectName = projectName;
         this.customer = customer;
         this.date = date;
+        this.state = State.Pending;
+        this.tasks = Task.getAllTypes();
+
     }
 
     //Getters and setters
