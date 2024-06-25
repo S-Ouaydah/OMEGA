@@ -8,12 +8,18 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class ProjectListView extends JFrame {
 
     private JTable projectTable;
     private JButton newProjectButton;
+    private static final String PROJECTS_DIR =  "src" ;
 
+
+    //Constructor
     public ProjectListView() {
         setTitle("Project Management");
         setSize(800, 600);
@@ -22,7 +28,12 @@ public class ProjectListView extends JFrame {
 
         // Create project table with a DefaultTableModel
         String[] columnNames = {"Project Name"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make table cells non-editable
+            }
+        };
         projectTable = new JTable(tableModel);
         projectTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Allow single project selection
 
@@ -58,14 +69,16 @@ public class ProjectListView extends JFrame {
         setVisible(true);
     }
 
+    //Method to update the project list
     private void updateProjectList() {
         DefaultTableModel tableModel = (DefaultTableModel) projectTable.getModel(); // Cast to DefaultTableModel
         tableModel.setRowCount(0); // Clear existing rows
 
-        // Add rows from existing project files (implement your logic here)
-        // You can iterate through project files in a directory and add their names
-        // for example:
-        File[] projectFiles = new File("projects").listFiles();
+        //dummy data
+        tableModel.addRow(new String[]{"st2"});
+        // Add rows from existing project files in the src directory
+        File projectDir = new File(PROJECTS_DIR);
+        File[] projectFiles = projectDir.listFiles();
         if (projectFiles != null) {
             for (File file : projectFiles) {
                 if (file.isFile() && file.getName().endsWith(".data")) {
@@ -76,16 +89,27 @@ public class ProjectListView extends JFrame {
         }
     }
 
-    public static void updateProjectList(String projectName, JTable table) {
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        tableModel.addRow(new String[]{projectName});
-    }
-
 
     private void openProject(String projectName) {
         // Implement logic to open an existing project from a file
-        // You can load the serialized Project data from the corresponding file
-        // and populate the views.ProjectListView with the loaded data
+        try {
+            File projectFile = new File( projectName + ".data");
+            if (projectFile.exists()) {
+                FileInputStream fileInputStream = new FileInputStream(projectFile);
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                Project project = (Project) objectInputStream.readObject();
+                objectInputStream.close();
+                fileInputStream.close();
+
+                // Open ProjectFormView with the loaded project data
+                new ProjectFormView(project).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Project file not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to open project.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         System.out.println("Opening project: " + projectName); // Placeholder for actual logic
     }
 

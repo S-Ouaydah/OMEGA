@@ -317,7 +317,15 @@ public class ProjectFormView extends JFrame {
         add(tasksTabbedPane, BorderLayout.CENTER);
 
         // Load saved project data on startup
-        loadProjectData("tass.data");
+        if(projectData.getProjectName() !=null){
+            loadProjectData(projectData.getProjectName()+".data");
+        }
+        else {
+            projectNameField.setText("New Project");
+            customerField.setText("New Customer");
+            dateField.setText(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
+        }
+
         setVisible(true);
     }
     public static void main(String[] args) {
