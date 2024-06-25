@@ -1,5 +1,6 @@
 package views;
 
+import models.ProcessTableModel;
 import models.resources.*;
 import models.Process;
 import models.Project;
@@ -77,35 +78,37 @@ public class ProjectFormView extends JFrame {
         return detailsFormPanel;
     }
 
-    private JPanel createTaskPanel(String taskName) {
+    private JPanel createTaskPanel(Task task, Project project) {
         JPanel taskPanel = new JPanel(new BorderLayout());
 
         String[] columnNames = {"Select","Process ID", "Process Name", "Status", "Cost", "Duration"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+//        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        ProcessTableModel processTableModel = new ProcessTableModel(task);
+        JTable processTable = new JTable(processTableModel);
+//        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+//        JTable processTable = new JTable(tableModel){
+//            @Override
+//            public Class getColumnClass(int column) {
+//                switch (column) {
+//                    case 0:
+//                        return Boolean.class;
+//                    default:
+//                        return super.getColumnClass(column);
+//                }
+//            }
+//        };
+//        tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
+//        tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
 
-        JTable processTable = new JTable(tableModel) {
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Boolean.class;
-                    default:
-                        return super.getColumnClass(column);
-                }
-            }
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 0 || column == 2; // Disable editing for (Process ID)
-            }
-        };
+
 //        processTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple row selection
 
         // Add some dummy data for illustration purposes
-//        foreach process : taskName.getProcesses() {
+        task.addProcess(new Process(1, "Design Specification", "Completed", 5, 5));
+        task.addProcess(new Process(2, "Material Selection", "In Progress", 3, 3));
+//        for (Process process : task.getProcesses()) {
 //            tableModel.addRow(new Object[]{false, process.getId(), process.getName(), process.getStatus(), process.getCost(), process.getDuration()});
 //        }
-        tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
-        tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
 
         // Create a button for adding empty rows
         JButton addRowButton = new JButton("Add Process");
@@ -117,7 +120,8 @@ public class ProjectFormView extends JFrame {
         // Add action listener to handle button click
         addRowButton.addActionListener(e -> {
             int newProcessId = latestProcessId[0] + 1;
-            tableModel.addRow(new Object[]{false, newProcessId, "", "", "", ""});
+//            tableModel.addRow(new Object[]{false, newProcessId, "", "", "", ""});
+            task.addProcess(new Process(newProcessId, "", "", 0, 0));
             latestProcessId[0] = newProcessId; // Update the process ID
         });
 
@@ -127,46 +131,30 @@ public class ProjectFormView extends JFrame {
         // Add action listener to handle button click for removing rows
         removeButton.addActionListener(e -> {
             // Iterate through all rows (not just selected)
-            for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
-                boolean isSelected = (boolean) tableModel.getValueAt(i, 0);
+            for (int i = processTableModel.getRowCount() - 1; i >= 0; i--) {
+                boolean isSelected = (boolean) processTableModel.getValueAt(i, 0);
                 if (isSelected) {
-                    tableModel.removeRow(i);
+                    task.removeProcess(task.getProcesses().get(i));
                 }
             }
         });
-
         //Create a save button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
             String fileName = projectNameField.getText() + ".data"; // Use project name as file name
 
             try {
-                // Convert Project object to Project for serialization
-                Project projectData = new Project(
-                        projectNameField.getText(),
-                        customerField.getText(),
-                        LocalDate.parse(dateField.getText(), DateTimeFormatter.ISO_DATE)
-                );
-
-                // Get tasks from the UI
-//                List<Task> tasks = getTasksFromUI();
-
-                // Add tasks to the project
-//                projectData.setTasks(tasks);
-
-                // Write project data to the specified file
-                projectData.writeToFile(fileName);
+                project.writeToFile(fileName);
 
                 System.out.println("Project saved successfully!");
 
-                dispose(); // Close views.ProjectListView after saving
+//                dispose(); // Close views.ProjectListView after saving
 
             } catch (IOException ex){
                 System.out.println("Error saving project data!");
             }
 
         });
-
 
 
         // Add buttons to the panel
@@ -181,59 +169,6 @@ public class ProjectFormView extends JFrame {
 
         return taskPanel;
     }
-//    private List<Task> getTasksFromUI() {
-//        List<Task> tasks = new ArrayList<>();
-//        for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
-//            JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
-//            String taskType = tasksTabbedPane.getTitleAt(i);
-//
-//            // Extract process data from the task panel
-//            JTable processTable = findProcessTable(taskPanel); // Find the JTable within the panel
-//
-//            // Only proceed if a process table is found
-//            if (processTable != null) {
-//                List<Process> processes = getProcessesFromTable(processTable);
-//
-//                // Only add the task if it has at least one selected process
-//                if (!processes.isEmpty()) {
-//                    Task task = new Task(taskType); // Assuming Task still uses a String type
-//                    task.setProcesses(processes);
-//                    tasks.add(task);
-//                }
-//            }
-//        }
-//        return tasks;
-//    }
-
-    private JTable findProcessTable(JPanel panel) {
-        for (int i = 0; i < panel.getComponentCount(); i++) {
-            Component component = panel.getComponent(i);
-            if (component instanceof JTable) {
-                return (JTable) component;
-            }
-        }
-        return null; // No JTable found in the panel
-    }
-
-//    private List<Task> getTasksFromUI() {
-//        List<Task> tasks = new ArrayList<>();
-//        for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
-//            JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
-//            String taskType = tasksTabbedPane.getTitleAt(i);
-//
-//            // Extract process data from the task panel (assuming a process table)
-//            JTable processTable = (JTable) taskPanel.getComponent(0); // Assuming process table is the first component
-//            List<Process> processes = getProcessesFromTable(processTable);
-//
-//            // Only add the task if it has at least one selected process
-//            if (!processes.isEmpty()) {
-//                Task task = new Task(taskType);
-//                task.setProcesses(processes);
-//                tasks.add(task);
-//            }
-//        }
-//        return tasks;
-//    }
 
     private List<Process> getProcessesFromTable(JTable processTable) {
         List<Process> processes = new ArrayList<>();
@@ -250,48 +185,60 @@ public class ProjectFormView extends JFrame {
         return processes;
     }
 
-    private void loadProjectData(String fileName) {
+    private static Project loadProject(String fileName) {
         try {
                 Project projectData = Project.readFromFile(fileName);
                 System.out.println(projectData);
                 System.out.println(projectData.getProjectName());
                 System.out.println(projectData.getCustomer());
                 System.out.println(projectData.getTasks());
-                projectNameField.setText(projectData.getProjectName());
-                customerField.setText(projectData.getCustomer());
-                dateField.setText(projectData.getDate().format(DateTimeFormatter.ISO_DATE));
-
-                // Loop through loaded tasks and populate tables
-                for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
-                    JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
-                    JTable processTable = findProcessTable(taskPanel);
-
-                    if (processTable != null) {
-                        DefaultTableModel tableModel = (DefaultTableModel) processTable.getModel();
-                        tableModel.setRowCount(0); // Clear existing data
-
-                        String taskType = tasksTabbedPane.getTitleAt(i);
-                        List<Task> tasks = projectData.getTasks();
-
-                        for (Task task : tasks) {
-                            if (task.getType().equals(taskType)) {
-                                // Found matching task, populate table
-                                for (Process process : task.getProcesses()) {
-                                    tableModel.addRow(new Object[]{false, process.getId(), process.getName(),
-                                            process.getStatus(), process.getCost(), process.getDuration()});
-                                }
-                                break; // Only populate the table for the matching task
-                            }
-                        }
+                for (Task task : projectData.getTasks()) {
+                     System.out.println(task.getType());
+                    for (Process process : task.getProcesses()) {
+                        System.out.println(process.getName());
+                        System.out.println(process.getStatus());
+                        System.out.println(process.getCost());
+                        System.out.println(process.getDuration());
                     }
                 }
-
                 System.out.println("Project loaded successfully!");
+
+                return projectData;
+//                projectNameField.setText(projectData.getProjectName());
+//                customerField.setText(projectData.getCustomer());
+//                dateField.setText(projectData.getDate().format(DateTimeFormatter.ISO_DATE));
+//
+//                // Loop through loaded tasks and populate tables
+//                for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
+//                    JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
+//                    JTable processTable = findProcessTable(taskPanel);
+//
+//                    if (processTable != null) {
+//                        DefaultTableModel tableModel = (DefaultTableModel) processTable.getModel();
+//                        tableModel.setRowCount(0); // Clear existing data
+//
+//                        String taskType = tasksTabbedPane.getTitleAt(i);
+//                        List<Task> tasks = projectData.getTasks();
+//
+//                        for (Task task : tasks) {
+//                            if (task.getType().equals(taskType)) {
+//                                // Found matching task, populate table
+//                                for (Process process : task.getProcesses()) {
+//                                    tableModel.addRow(new Object[]{false, process.getId(), process.getName(),
+//                                            process.getStatus(), process.getCost(), process.getDuration()});
+//                                }
+//                                break; // Only populate the table for the matching task
+//                            }
+//                        }
+//                    }
+//                }
+
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("Error loading project data!");
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading project: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Error loading project: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return null;
     }
 
     public ProjectFormView(Project projectData) {
@@ -307,28 +254,37 @@ public class ProjectFormView extends JFrame {
 
         // Create tasks tabbed pane
         tasksTabbedPane = new JTabbedPane();
+        add(tasksTabbedPane, BorderLayout.CENTER);
+
+        this.projectNameField.setText(projectData.getProjectName());
+        this.customerField.setText(projectData.getCustomer());
+        //todo fix date
+//        this.dateField.setText(projectData.getDate().format(DateTimeFormatter.ISO_DATE));
+
+//        Create Task Panel Process table, with save button
         List<Task> projectTasks = projectData.getTasks();
         if (projectTasks!=null) {
             for (Task task : projectTasks) {
-                tasksTabbedPane.addTab(task.getType().toString(), createTaskPanel(task.getType().name()));
+                tasksTabbedPane.addTab(task.getType().toString(), createTaskPanel(task,projectData));
             }
         }
 
         add(tasksTabbedPane, BorderLayout.CENTER);
 
         // Load saved project data on startup
-        if(projectData.getProjectName() !=null){
-            loadProjectData(projectData.getProjectName()+".data");
-        }
-        else {
-            projectNameField.setText("New Project");
-            customerField.setText("New Customer");
-            dateField.setText(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
-        }
+//        if(projectData.getProjectName() !=null){
+//            loadProject(projectData.getProjectName()+".data");
+//        }
+//        else {
+//            projectNameField.setText("New Project");
+//            customerField.setText("New Customer");
+//            dateField.setText(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
+//        }
 
         setVisible(true);
     }
     public static void main(String[] args) {
+//        new ProjectFormView(loadProject("as.data"));
         new ProjectFormView(new Project());
 
     }

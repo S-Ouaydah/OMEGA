@@ -3,8 +3,9 @@ package models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
-public class Task implements Serializable {
+public class Task extends Observable implements Serializable {
 
     public enum Type {
         Design, Preparation, Fabrication, Assembly, Testing
@@ -44,6 +45,8 @@ public class Task implements Serializable {
         processes.add(process);
 //        todo: fix cost
 //        updateCostAndDuration(); // Recalculate cost and duration after adding a process
+        notifyObservers();
+        setChanged();
     }
 
     // Remove process from the task
@@ -51,10 +54,8 @@ public class Task implements Serializable {
         processes.remove(process);
 //        todo: fix cost
 //        updateCostAndDuration(); // Recalculate cost and duration after removing a process
-    }
-    public void setProcesses(List<Process> processes) {
-        this.processes = processes;
-//      updateCostAndDuration();
+        notifyObservers();
+        setChanged();
     }
 
     // Update cost and duration based on processes

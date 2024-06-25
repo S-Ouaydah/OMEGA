@@ -51,8 +51,11 @@ public class Process implements Serializable {
     public String getStatus() {
         return status;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public double getCost() {
+        return cost;
+    }
+    public int getDuration() {
+        return duration;
     }
 
     // Assign resource to the process
@@ -74,12 +77,13 @@ public class Process implements Serializable {
             cost += resource.getCost(nb);
         }
     }
-
-    public double getCost() {
-        return cost;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public int getDuration() {
-        return duration;
+    public void setStatus(String status) {
+        this.status = status;
     }
+     public void setDuration(int duration) {
+          this.duration = duration;
+     }
 }
