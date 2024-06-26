@@ -29,7 +29,7 @@ public class ProjectFormView extends JFrame {
     private JPanel createMainPanel() {
         setTitle("Project Form");
         setSize(800, 600);
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Create project details panel
@@ -85,6 +85,10 @@ public class ProjectFormView extends JFrame {
 //        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         ProcessTableModel processTableModel = new ProcessTableModel(task);
         JTable processTable = new JTable(processTableModel);
+        // Add some dummy data for illustration purposes
+//        task.addProcess(new Process(1, "Design Specification", "Completed", 5, 5));
+//        task.addProcess(new Process(2, "Material Selection", "In Progress", 3, 3));
+
 //        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 //        JTable processTable = new JTable(tableModel){
 //            @Override
@@ -103,9 +107,6 @@ public class ProjectFormView extends JFrame {
 
 //        processTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple row selection
 
-        // Add some dummy data for illustration purposes
-        task.addProcess(new Process(1, "Design Specification", "Completed", 5, 5));
-        task.addProcess(new Process(2, "Material Selection", "In Progress", 3, 3));
 //        for (Process process : task.getProcesses()) {
 //            tableModel.addRow(new Object[]{false, process.getId(), process.getName(), process.getStatus(), process.getCost(), process.getDuration()});
 //        }
@@ -144,6 +145,9 @@ public class ProjectFormView extends JFrame {
             String fileName = projectNameField.getText() + ".data"; // Use project name as file name
 
             try {
+                project.setProjectName(projectNameField.getText());
+                project.setCustomer(customerField.getText());
+                project.setDate(LocalDate.parse(dateField.getText(), DateTimeFormatter.ISO_DATE));
                 project.writeToFile(fileName);
 
                 System.out.println("Project saved successfully!");
@@ -284,8 +288,8 @@ public class ProjectFormView extends JFrame {
         setVisible(true);
     }
     public static void main(String[] args) {
-//        new ProjectFormView(loadProject("as.data"));
-        new ProjectFormView(new Project());
+        new ProjectFormView(loadProject("test.data"));
+//        new ProjectFormView(new Project());
 
     }
 }
