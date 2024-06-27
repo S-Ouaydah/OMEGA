@@ -32,7 +32,7 @@ public class ProcessFormView extends JFrame {
     public ProcessFormView(Process process) {
         setTitle("OMEGA: Process Form");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JPanel detailsFormPanel = createDetailsPanel();

@@ -79,10 +79,10 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
     }
 
 
-//    @Override
-//    public boolean isCellEditable(int rowIndex, int columnIndex) {
-//        return columnIndex == 0 || columnIndex == 2 || columnIndex == 5;
-//    }
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columnIndex == 0 ;
+    }
     @Override
     public void update(Observable o, Object arg) {
         fireTableDataChanged();

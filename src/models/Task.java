@@ -41,12 +41,13 @@ public class Task extends Observable implements Serializable {
         this.status = status;
     }
     // Add process to the task
-    public void addProcess(Process process) {
+    public Process addProcess(Process process) {
         processes.add(process);
 //        todo: fix cost
 //        updateCostAndDuration(); // Recalculate cost and duration after adding a process
         setChanged();
         notifyObservers();
+        return process;
     }
 
     // Remove process from the task

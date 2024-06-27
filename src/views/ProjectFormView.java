@@ -94,6 +94,11 @@ public class ProjectFormView extends JFrame {
                 if (row >= 0 && col >= 0) {
                     System.out.println("Row: " + row + " Col: " + col);
                 }
+                if (col != 0) {
+//                get the selected process object
+                Process selectedProcess = task.getProcesses().get(row);
+                new ProcessFormView(selectedProcess);
+                }
             }
         });
 
@@ -105,9 +110,11 @@ public class ProjectFormView extends JFrame {
         // Add action listener to handle button click
         addRowButton.addActionListener(e -> {
             int newProcessId = latestProcessId[0] + 1;
-//            tableModel.addRow(new Object[]{false, newProcessId, "", "", "", ""});
-            task.addProcess(new Process(newProcessId, "", "", 0, 0));
+            new ProcessFormView(task.addProcess(new Process(newProcessId, "", "", 0, 0)));
+//            task.addProcess(new Process(newProcessId, "", "", 0, 0));
             latestProcessId[0] = newProcessId; // Update the process ID
+            processTableModel.selectedRows.clear();
+
         });
 
         // Create a button for removing selected rows
@@ -121,6 +128,8 @@ public class ProjectFormView extends JFrame {
                     task.removeProcess(task.getProcesses().get(i));
                 }
             }
+            processTableModel.selectedRows.clear();
+
         });
 
         //Create a save button
