@@ -22,5 +22,6 @@ public abstract class Resource implements Serializable{
     }
 
     public abstract double getCost(int nb); // Abstract method to get the cost of the resource
+
 }
 

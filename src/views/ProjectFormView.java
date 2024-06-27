@@ -85,39 +85,24 @@ public class ProjectFormView extends JFrame {
 //        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         ProcessTableModel processTableModel = new ProcessTableModel(task);
         JTable processTable = new JTable(processTableModel);
-        // Add some dummy data for illustration purposes
-//        task.addProcess(new Process(1, "Design Specification", "Completed", 5, 5));
-//        task.addProcess(new Process(2, "Material Selection", "In Progress", 3, 3));
+        processTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//        add listner for clicking on rows
+        processTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = processTable.rowAtPoint(evt.getPoint());
+                int col = processTable.columnAtPoint(evt.getPoint());
+                if (row >= 0 && col >= 0) {
+                    System.out.println("Row: " + row + " Col: " + col);
+                }
+            }
+        });
 
-//        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-//        JTable processTable = new JTable(tableModel){
-//            @Override
-//            public Class getColumnClass(int column) {
-//                switch (column) {
-//                    case 0:
-//                        return Boolean.class;
-//                    default:
-//                        return super.getColumnClass(column);
-//                }
-//            }
-//        };
-//        tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
-//        tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
-
-
-//        processTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple row selection
-
-//        for (Process process : task.getProcesses()) {
-//            tableModel.addRow(new Object[]{false, process.getId(), process.getName(), process.getStatus(), process.getCost(), process.getDuration()});
-//        }
 
         // Create a button for adding empty rows
         JButton addRowButton = new JButton("Add Process");
-
-
         // Track the latest process ID
-        int[] latestProcessId = {2}; // Start from 2 based on dummy data
-
+        int[] latestProcessId = {0};
         // Add action listener to handle button click
         addRowButton.addActionListener(e -> {
             int newProcessId = latestProcessId[0] + 1;
@@ -128,7 +113,6 @@ public class ProjectFormView extends JFrame {
 
         // Create a button for removing selected rows
         JButton removeButton = new JButton("Remove Selected Processes");
-
         // Add action listener to handle button click for removing rows
         removeButton.addActionListener(e -> {
             // Iterate through all rows (not just selected)
@@ -139,6 +123,7 @@ public class ProjectFormView extends JFrame {
                 }
             }
         });
+
         //Create a save button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
@@ -238,11 +223,11 @@ public class ProjectFormView extends JFrame {
 //                }
 
         } catch (IOException | ClassNotFoundException ex) {
-            System.out.println("Error loading project data!");
+            System.out.println("Error loading project data!, launching new project instead.");
             ex.printStackTrace();
+            return new Project();
 //            JOptionPane.showMessageDialog(this, "Error loading project: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return null;
     }
 
     public ProjectFormView(Project projectData) {
@@ -270,6 +255,7 @@ public class ProjectFormView extends JFrame {
         if (projectTasks!=null) {
             for (Task task : projectTasks) {
                 tasksTabbedPane.addTab(task.getType().toString(), createTaskPanel(task,projectData));
+
             }
         }
 

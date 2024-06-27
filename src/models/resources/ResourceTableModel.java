@@ -1,4 +1,7 @@
-package models;
+package models.resources;
+
+import models.Process;
+import models.Task;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -8,14 +11,14 @@ import java.util.Observer;
 
 import static java.lang.Integer.parseInt;
 
-public class ProcessTableModel extends AbstractTableModel implements Observer {
-    private static final String[] COLUMN_NAMES = {"Select","ID", "Name", "Status","Cost", "Duration"};
-    private List<Process> processes;
+public class ResourceTableModel extends AbstractTableModel implements Observer {
+    private static final String[] COLUMN_NAMES = {"Resource ID", "Rescource Name", "Cost", "Duration"};
+    private List<Resource> resources;
     public List<Integer> selectedRows = new ArrayList<>();
 
-    public ProcessTableModel(Task task) {
-        this.processes = task.getProcesses();
-        task.addObserver(this);
+    public ResourceTableModel(Process process) {
+        this.resources = process.getResources();
+        process.addObserver(this);
     }
 
     @Override
@@ -30,7 +33,7 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
 
     @Override
     public int getRowCount() {
-        return processes.size();
+        return resources.size();
     }
 
     @Override
@@ -45,27 +48,23 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Process process = processes.get(rowIndex);
+        Resource resource = resources.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return selectedRows.contains(rowIndex);
+                return resource.getId();
             case 1:
-                return process.getId();
+                return resource.getName();
             case 2:
-                return process.getName();
+                return resource.getCost();
             case 3:
-                return process.getCost();
-            case 4:
-                return process.getStatus();
-            case 5:
-                return process.getDuration();
+                return resource.getDuration();
             default:
                 return null;
         }
     }
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Process process = processes.get(rowIndex);
+        Resource resource = resources.get(rowIndex);
         if (columnIndex == 0) {
             if ((boolean) aValue) {
                 selectedRows.add(rowIndex);
@@ -73,18 +72,19 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
                 selectedRows.remove((Integer) rowIndex);
             }
         }
-        if (columnIndex == 2) process.setName((String) aValue);
-        if (columnIndex == 4) process.setStatus((String) aValue);
-        if (columnIndex == 5) process.setDuration(parseInt((String) aValue));
+        if (columnIndex == 2) resource.setName((String) aValue);
+        if (columnIndex == 4) resource.setCost(parseInt((String) aValue));
+        if (columnIndex == 5) resource.setDuration(parseInt((String) aValue));
     }
 
 
-//    @Override
-//    public boolean isCellEditable(int rowIndex, int columnIndex) {
-//        return columnIndex == 0 || columnIndex == 2 || columnIndex == 5;
-//    }
+        @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columnIndex != 0;
+    }
     @Override
     public void update(Observable o, Object arg) {
         fireTableDataChanged();
     }
 }
+

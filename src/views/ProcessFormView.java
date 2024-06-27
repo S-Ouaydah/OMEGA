@@ -2,13 +2,16 @@ package views;
 
 import models.Process;
 import models.Project;
+import models.resources.Resource;
+import models.resources.ResourceTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class ProcessFormView extends JFrame {
-    private JTable resourcesTable;
+    private JTextField processName;
+    private JTextField test;
     private JButton newResourceButton;
     private JTabbedPane resourcesTabbedPane;
     public ProcessFormView(Process process) {
@@ -16,17 +19,25 @@ public class ProcessFormView extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+//        add processName to top
+        JPanel detailsFormPanel = new JPanel(new GridLayout(3, 4, 5, 5));
 
-        String[] columnNames = {"Resource Name", "Resource Type", "Resource Cost"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-        resourcesTable = new JTable(tableModel);
-        resourcesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        detailsFormPanel.add(new JLabel("Process Name:"));
+        processName = new JTextField();
+        detailsFormPanel.add(processName);
+
+        detailsFormPanel.add(new JLabel("test:"));
+        test = new JTextField();
+        detailsFormPanel.add(test);
+        add(detailsFormPanel, BorderLayout.NORTH);
+
 
         resourcesTabbedPane = new JTabbedPane();
-        String[] taskNames = {"Human", "Material", "MISC"};
-        for (String taskName : taskNames) {
-            resourcesTabbedPane.addTab(taskName, createProcessPanel(taskName));
-        }
+        String[] taskNames = {"Human", "Material", "MISC"}; //todo make enum on the level of resource and add tabs and their content based on that new enum
+        process.getResources().forEach(resource -> {
+            resourcesTabbedPane.addTab(resource.getName(), createProcessPanel(resource));
+        });
+
         add(resourcesTabbedPane, BorderLayout.CENTER);
 
 //        JScrollPane scrollPane = new JScrollPane(resourcesTable);
@@ -44,36 +55,21 @@ public class ProcessFormView extends JFrame {
 
         setVisible(true);
     }
-    private JPanel createProcessPanel(String taskName) {
+    private JPanel createProcessPanel(Process process) {
         JPanel taskPanel = new JPanel(new BorderLayout());
 
-        String[] columnNames = {"Select","Process ID", "Process Name", "Status", "Cost", "Duration"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
-        JTable processTable = new JTable(tableModel) {
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Boolean.class;
-                    default:
-                        return super.getColumnClass(column);
-                }
-            }
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column != 1; // Disable editing for (Process ID)
-            }
-        };
-        processTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple row selection
+        ResourceTableModel tableModel = new ResourceTableModel(process);
+
+        JTable processTable = new JTable(tableModel);
 
         // Add some dummy data for illustration purposes
-        tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
-        tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
+//        tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
+//        tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
 
         // Create a button for adding empty rows
         JButton addRowButton = new JButton("Add Process");
-
+        addRowButton.
 
         JScrollPane scrollPane = new JScrollPane(processTable);
         taskPanel.add(scrollPane, BorderLayout.CENTER);

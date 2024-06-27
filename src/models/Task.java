@@ -45,8 +45,8 @@ public class Task extends Observable implements Serializable {
         processes.add(process);
 //        todo: fix cost
 //        updateCostAndDuration(); // Recalculate cost and duration after adding a process
-        notifyObservers();
         setChanged();
+        notifyObservers();
     }
 
     // Remove process from the task
@@ -54,8 +54,8 @@ public class Task extends Observable implements Serializable {
         processes.remove(process);
 //        todo: fix cost
 //        updateCostAndDuration(); // Recalculate cost and duration after removing a process
-        notifyObservers();
         setChanged();
+        notifyObservers();
     }
 
     // Update cost and duration based on processes

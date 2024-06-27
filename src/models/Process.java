@@ -6,8 +6,9 @@ import models.resources.Resource;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
-public class Process implements Serializable {
+public class Process extends Observable implements Serializable {
     private int id; // Unique identifier for the process
     private String name; // Name of the process
     private List<Resource> resources; // List of resources assigned to the process
@@ -57,7 +58,9 @@ public class Process implements Serializable {
     public int getDuration() {
         return duration;
     }
-
+    public List<Resource> getResources() {
+        return resources;
+    }
     // Assign resource to the process
     public void assignResource(Resource resource, int nb) {
         resources.add(resource);
