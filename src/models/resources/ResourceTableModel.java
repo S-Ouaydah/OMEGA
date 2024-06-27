@@ -21,15 +21,15 @@ public class ResourceTableModel extends AbstractTableModel implements Observer {
         process.addObserver(this);
     }
 
-    @Override
-    public Class<?> getColumnClass(int column) {
-        switch (column) {
-            case 0:
-                return Boolean.class;
-            default:
-                return super.getColumnClass(column);
-        }
-    }
+//    @Override
+//    public Class<?> getColumnClass(int column) {
+//        switch (column) {
+//            case 0:
+//                return Boolean.class;
+//            default:
+//                return super.getColumnClass(column);
+//        }
+//    }
 
     @Override
     public int getRowCount() {
@@ -56,8 +56,8 @@ public class ResourceTableModel extends AbstractTableModel implements Observer {
                 return resource.getName();
             case 2:
                 return resource.getCost();
-            case 3:
-                return resource.getDuration();
+//            case 3:
+//                return resource.getDuration();
             default:
                 return null;
         }
@@ -65,16 +65,9 @@ public class ResourceTableModel extends AbstractTableModel implements Observer {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         Resource resource = resources.get(rowIndex);
-        if (columnIndex == 0) {
-            if ((boolean) aValue) {
-                selectedRows.add(rowIndex);
-            } else {
-                selectedRows.remove((Integer) rowIndex);
-            }
-        }
-        if (columnIndex == 2) resource.setName((String) aValue);
-        if (columnIndex == 4) resource.setCost(parseInt((String) aValue));
-        if (columnIndex == 5) resource.setDuration(parseInt((String) aValue));
+        if (columnIndex == 1) resource.setName((String) aValue);
+//        if (columnIndex == 4) resource.setCost(parseInt((String) aValue));
+//        if (columnIndex == 5) resource.setDuration(parseInt((String) aValue));
     }
 
 

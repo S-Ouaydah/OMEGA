@@ -81,12 +81,11 @@ public class ProjectFormView extends JFrame {
     private JPanel createTaskPanel(Task task, Project project) {
         JPanel taskPanel = new JPanel(new BorderLayout());
 
-        String[] columnNames = {"Select","Process ID", "Process Name", "Status", "Cost", "Duration"};
+//        String[] columnNames = {"Select","Process ID", "Process Name", "Status", "Cost", "Duration"};
 //        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         ProcessTableModel processTableModel = new ProcessTableModel(task);
         JTable processTable = new JTable(processTableModel);
         processTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        add listner for clicking on rows
         processTable.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {

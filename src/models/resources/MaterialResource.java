@@ -5,9 +5,10 @@ import java.io.Serializable;
 // Material models.resources.Resource class
 public class MaterialResource extends Resource implements Serializable {
     private double unitCost; // Cost per unit of the material
+    private int quantity; // Quantity of the material
 
     // Constructor
-    public MaterialResource(String id, String name, double unitCost) {
+    public MaterialResource(int id, String name, double unitCost) {
         super(id, name);
         this.unitCost = unitCost;
     }
@@ -18,7 +19,7 @@ public class MaterialResource extends Resource implements Serializable {
     }
 
     @Override
-    public double getCost(int quantity) {
+    public double getCost() {
         return unitCost * quantity;
     }
 }

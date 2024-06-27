@@ -1,5 +1,6 @@
 package models;
 
+import models.resources.HumanResource;
 import models.resources.MaterialResource;
 import models.resources.Resource;
 
@@ -20,6 +21,8 @@ public class Process extends Observable implements Serializable {
     // Constructor
     public Process() {
         this.resources = new ArrayList<>();
+        this.resources.add(new MaterialResource(0,"mattest",222));
+        this.resources.add(new HumanResource(0,"humattest","role",222));
         this.cost = 0;
         this.status = "In Progress";
         this.duration = 0;
@@ -62,22 +65,26 @@ public class Process extends Observable implements Serializable {
         return resources;
     }
     // Assign resource to the process
-    public void assignResource(Resource resource, int nb) {
+    public void addResource(Resource resource, int nb) {
         resources.add(resource);
 //        updateCost(nb); // Recalculate cost after assigning a resource
+        setChanged();
+        notifyObservers();
     }
 
     // Remove resource from the process
-    public void removeResource(Resource resource, int nb) {
+    public void removeResource(Resource resource) {
         resources.remove(resource);
 //        updateCost(nb); // Recalculate cost after removing a resource
+        setChanged();
+        notifyObservers();
     }
 
     // Update cost based on resources
     private void updateCost(int nb) {
         cost = 0;
         for (Resource resource : resources) {
-            cost += resource.getCost(nb);
+            cost += resource.getCost();
         }
     }
     public void setName(String name) {

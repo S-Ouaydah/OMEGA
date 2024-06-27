@@ -5,9 +5,10 @@ import java.io.Serializable;
 public class HumanResource extends Resource implements Serializable {
     private String role; // Employee's role
     private double hourlyRate; // Employee's hourly rate
+    private int hours; // Number of hours worked
 
     // Constructor
-    public HumanResource(String id, String name, String role, double hourlyRate) {
+    public HumanResource(int id, String name, String role, double hourlyRate) {
         super(id, name);
         this.role = role;
         this.hourlyRate = hourlyRate;
@@ -24,8 +25,7 @@ public class HumanResource extends Resource implements Serializable {
     }
 
     @Override
-    public double getCost(int hours) {
-        // Calculate cost based on hourly rate
+    public double getCost() {
         return hourlyRate * hours;
     }
 }

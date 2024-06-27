@@ -3,17 +3,17 @@ package models.resources;
 import java.io.Serializable;
 
 public abstract class Resource implements Serializable{
-    protected String id; // Unique identifier for the resource
+    protected int id; // Unique identifier for the resource
     protected String name; // Name of the resource
 
     // Constructor
-    public Resource(String id, String name) {
+    public Resource(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
     // Getters for id and name
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -21,7 +21,10 @@ public abstract class Resource implements Serializable{
         return name;
     }
 
-    public abstract double getCost(int nb); // Abstract method to get the cost of the resource
+    public abstract double getCost(); // Abstract method to get the cost of the resource
 
+    public String setName(String name) {
+        return this.name = name;
+    }
 }
 
