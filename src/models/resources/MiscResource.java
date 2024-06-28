@@ -15,4 +15,20 @@ public class MiscResource extends Resource implements Serializable {
     public double getCost() {
         return cost;
     }
+    @Override
+    public Object getVal(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> getId();
+            case 1 -> getName();
+            case 2 -> getCost();
+            default -> null;
+        };
+    }
+    @Override
+    public void setVal(int columnIndex, Object aValue) {
+        switch (columnIndex) {
+            case 1 -> name = ((String) aValue);
+            case 2 -> cost = (double) aValue;
+        }
+    }
 }

@@ -64,6 +64,33 @@ public class Process extends Observable implements Serializable {
     public List<Resource> getResources() {
         return resources;
     }
+    public List<Resource> getResources(Resource.resourceTypes type) { //todo fix this ugly
+        List<Resource> resourceList = new ArrayList<>();
+            switch (type) {
+                case Material -> {
+                    for (Resource resource : resources) {
+                        if (resource instanceof MaterialResource) {
+                            resourceList.add(resource);
+                        }
+                    }
+                }
+                case Human -> {
+                    for (Resource resource : resources) {
+                        if (resource instanceof HumanResource) {
+                            resourceList.add(resource);
+                        }
+                    }
+                }
+                case Misc -> {
+                    for (Resource resource : resources) {
+                        if (!(resource instanceof MaterialResource) && !(resource instanceof HumanResource)) {
+                            resourceList.add(resource);
+                        }
+                    }
+                }
+        }
+        return resourceList;
+    }
     // Assign resource to the process
     public void addResource(Resource resource, int nb) {
         resources.add(resource);
@@ -96,4 +123,7 @@ public class Process extends Observable implements Serializable {
      public void setDuration(int duration) {
           this.duration = duration;
      }
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
 }

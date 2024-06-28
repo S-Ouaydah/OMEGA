@@ -22,4 +22,23 @@ public class MaterialResource extends Resource implements Serializable {
     public double getCost() {
         return unitCost * quantity;
     }
+
+    @Override
+    public Object getVal(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> getId();
+            case 1 -> getName();
+            case 2 -> getUnitCost();
+            case 3 -> quantity;
+            default -> null;
+        };
+    }
+    @Override
+    public void setVal(int columnIndex, Object aValue) {
+        switch (columnIndex) {
+            case 1 -> name = ((String) aValue);
+            case 2 -> unitCost = (double) aValue;
+            case 3 -> quantity = (int) aValue;
+        }
+    }
 }

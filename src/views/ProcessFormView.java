@@ -1,31 +1,35 @@
 package views;
 
 import models.Process;
-import models.resources.MaterialResource;
-import models.resources.ResourceTableModel;
+import models.resources.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ProcessFormView extends JFrame {
     private JTextField processName;
-    private JTextField totalCost;
-    private JTextField totalDuration;
+    private JLabel totalCost;
+    private JLabel totalDuration;
     private JButton saveButton;
     private JTabbedPane resourcesTabbedPane;
 
-    private JPanel createDetailsPanel(){
+    private JPanel createDetailsPanel(Process process){
         JPanel detailsFormPanel = new JPanel(new GridLayout(3, 4, 5, 5));
 
         detailsFormPanel.add(new JLabel("Process Name:"));
         processName = new JTextField();
+        processName.setText(process.getName());
         detailsFormPanel.add(processName);
 
         detailsFormPanel.add(new JLabel("Total Cost:"));
-        totalCost = new JTextField();
+        totalCost = new JLabel();
+        totalCost.setText(String.valueOf(process.getCost()));
+        detailsFormPanel.add(totalCost);
 
         detailsFormPanel.add(new JLabel("Total Duration:"));
-        totalDuration = new JTextField();
+        totalDuration = new JLabel();
+        totalDuration.setText(String.valueOf(process.getDuration()));
+        detailsFormPanel.add(totalDuration);
 
         return detailsFormPanel;
     }
@@ -35,17 +39,17 @@ public class ProcessFormView extends JFrame {
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel detailsFormPanel = createDetailsPanel();
+        JPanel detailsFormPanel = createDetailsPanel(process);
         add(detailsFormPanel, BorderLayout.NORTH);
 
         resourcesTabbedPane = new JTabbedPane();
-        String[] resourceTypes = {"Human", "Material", "MISC"}; //todo make enum on the level of resource and add tabs and their content based on that new enum
-        for (String resourceType : resourceTypes) {
-            resourcesTabbedPane.addTab(resourceType, createProcessPanel(process));
-        }
-//        resourceTypes.forEach(resourceType -> {
-//            resourcesTabbedPane.addTab(resource.getName(), createProcessPanel(resource));
-//        });
+        resourcesTabbedPane.addTab("Human", createProcessPanel(process, Resource.resourceTypes.Human));
+        resourcesTabbedPane.addTab("Material", createProcessPanel(process, Resource.resourceTypes.Material));
+        resourcesTabbedPane.addTab("Misc", createProcessPanel(process, Resource.resourceTypes.Misc));
+//        String[] resourceTypes = {"Human", "Material", "MISC"};
+//        for (String resourceType : resourceTypes) {
+//            resourcesTabbedPane.addTab(resourceType, createProcessPanel(process));
+//        }
 
         add(resourcesTabbedPane, BorderLayout.CENTER);
 
@@ -55,7 +59,18 @@ public class ProcessFormView extends JFrame {
         // Create new project button
         saveButton = new JButton("Save Process");
         saveButton.addActionListener(e -> {
-//            exit the jpanel
+            if (processName.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter the name of the process", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            process.setName(processName.getText());
+            if (!totalCost.getText().isEmpty()) {
+                process.setCost(Double.parseDouble(totalCost.getText()));
+            }
+            if (!totalDuration.getText().isEmpty()){
+                process.setDuration(Integer.parseInt(totalDuration.getText()));
+            }
+//          exit the jpanel
             dispose();
         });
 
@@ -65,26 +80,31 @@ public class ProcessFormView extends JFrame {
 
         setVisible(true);
     }
-    private JPanel createProcessPanel(Process process) {
+    private JPanel createProcessPanel(Process process, Resource.resourceTypes type) {
         JPanel taskPanel = new JPanel(new BorderLayout());
 
 
-        ResourceTableModel tableModel = new ResourceTableModel(process);
+        ResourceTableModel tableModel = new ResourceTableModel(process, type);
         JTable processTable = new JTable(tableModel);
-
-        // Add some dummy data for illustration purposes
-//        tableModel.addRow(new Object[]{false, "1", "Design Specification", "Completed", "$1000", "5 days"});
-//        tableModel.addRow(new Object[]{false, "2", "Material Selection", "In Progress", "$500", "3 days"});
 
         // Create a button for adding empty rows
         JButton addRowButton = new JButton("Add Resource");
         int[] latestProcessId = {0};
         addRowButton.addActionListener(e -> {
             System.out.println("Add Resource clicked");
-//            int newProcessId = latestProcessId[0] + 1;
-////            tableModel.addRow(new Object[]{false, newProcessId, "", "", "", ""});
-//            process.addResource(new MaterialResource(newProcessId, "", 0.0), 1);
-//            latestProcessId[0] = newProcessId; // Update the process ID
+            int newProcessId = latestProcessId[0] + 1;
+            switch (type) {
+                case Human:
+                    process.addResource(new HumanResource(newProcessId, "", "Dev",0.0), 1);
+                    break;
+                case Material:
+                    process.addResource(new MaterialResource(newProcessId, "", 0.0), 1);
+                    break;
+                case Misc:
+                    process.addResource(new MiscResource(newProcessId, "", 0.0), 1);
+                    break;
+            }
+            latestProcessId[0] = newProcessId; // Update the process ID
         });
         // Create a button for removing selected rows
         JButton removeButton = new JButton("Remove Selected Processes");
@@ -92,6 +112,13 @@ public class ProcessFormView extends JFrame {
         removeButton.addActionListener(e -> {
             // Iterate through selected rows and remove them from the table
 //            process.removeResource();
+            for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
+                if (tableModel.selectedRows.contains(i)) {
+                    process.removeResource(process.getResources().get(i));
+                }
+            }
+            // Clear the selected rows list
+            tableModel.selectedRows.clear();
         });
         // Add buttons to the panel
         JPanel buttonPanel = new JPanel();

@@ -4,20 +4,18 @@ import models.Process;
 import models.Task;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
 public class ResourceTableModel extends AbstractTableModel implements Observer {
-    private static final String[] COLUMN_NAMES = {"Resource ID", "Rescource Name", "Cost", "Duration"};
+    private String[] COLUMN_NAMES;
     private List<Resource> resources;
     public List<Integer> selectedRows = new ArrayList<>();
 
-    public ResourceTableModel(Process process) {
-        this.resources = process.getResources();
+    public ResourceTableModel(Process process, Resource.resourceTypes type) {
+        this.resources = process.getResources(type);
+        this.COLUMN_NAMES = type.getColumnNames();
         process.addObserver(this);
     }
 
@@ -49,23 +47,25 @@ public class ResourceTableModel extends AbstractTableModel implements Observer {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Resource resource = resources.get(rowIndex);
-        switch (columnIndex) {
-            case 0:
-                return resource.getId();
-            case 1:
-                return resource.getName();
-            case 2:
-                return resource.getCost();
-//            case 3:
-//                return resource.getDuration();
-            default:
-                return null;
-        }
+        return resource.getVal(columnIndex);
+//        switch (columnIndex) {
+//            case 0:
+//                return resource.getId();
+//            case 1:
+//                return resource.getName();
+//            case 2:
+//                return resource.getCost();
+////            case 3:
+////                return resource.getDuration();
+//            default:
+//                return null;
+//        }
     }
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         Resource resource = resources.get(rowIndex);
-        if (columnIndex == 1) resource.setName((String) aValue);
+        resource.setVal(columnIndex,aValue);
+//        if (columnIndex == 1) resource.setName((String) aValue);
 //        if (columnIndex == 4) resource.setCost(parseInt((String) aValue));
 //        if (columnIndex == 5) resource.setDuration(parseInt((String) aValue));
     }
