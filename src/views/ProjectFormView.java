@@ -193,9 +193,9 @@ public class ProjectFormView extends JFrame {
                      System.out.println(task.getType());
                     for (Process process : task.getProcesses()) {
                         System.out.println(process.getName());
-                        System.out.println(process.getStatus());
-                        System.out.println(process.getCost());
-                        System.out.println(process.getDuration());
+                        for (Resource resource : process.getResources()) {
+                            System.out.println(resource);
+                        }
                     }
                 }
                 System.out.println("Project loaded successfully!");
@@ -282,7 +282,7 @@ public class ProjectFormView extends JFrame {
         setVisible(true);
     }
     public static void main(String[] args) {
-        new ProjectFormView(loadProject("test.data"));
+        new ProjectFormView(loadProject("asdad.data"));
 //        new ProjectFormView(new Project());
 
     }

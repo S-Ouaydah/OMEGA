@@ -4,6 +4,8 @@ import models.resources.HumanResource;
 import models.resources.MaterialResource;
 import models.resources.Resource;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,11 +110,15 @@ public class Process extends Observable implements Serializable {
     }
 
     // Update cost based on resources
-    private void updateCost(int nb) {
+    public void updateCost() {
         cost = 0;
         for (Resource resource : resources) {
             cost += resource.getCost();
+//            todo is duration automatically updated too?
         }
+        System.out.println("Cost updated" + cost);
+        setChanged();
+        notifyObservers();
     }
     public void setName(String name) {
         this.name = name;
@@ -126,4 +132,6 @@ public class Process extends Observable implements Serializable {
     public void setCost(double cost) {
         this.cost = cost;
     }
+
+
 }

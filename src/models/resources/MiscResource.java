@@ -2,6 +2,8 @@ package models.resources;
 
 import java.io.Serializable;
 
+import static java.lang.Double.parseDouble;
+
 public class MiscResource extends Resource implements Serializable {
     private double cost; // Cost per unit of the material
 
@@ -28,7 +30,7 @@ public class MiscResource extends Resource implements Serializable {
     public void setVal(int columnIndex, Object aValue) {
         switch (columnIndex) {
             case 1 -> name = ((String) aValue);
-            case 2 -> cost = (double) aValue;
+            case 2 -> cost = parseDouble((String) aValue);
         }
     }
 }

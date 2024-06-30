@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+
 public class HumanResource extends Resource implements Serializable {
     private String role; // Employee's role
     private double hourlyRate; // Employee's hourly rate
@@ -60,8 +63,8 @@ public class HumanResource extends Resource implements Serializable {
         switch (columnIndex) {
             case 1 -> name = ((String) aValue);
             case 2 -> role = ((String) aValue);
-            case 3 -> hourlyRate = (double) aValue;
-            case 4 -> hours = (int) aValue;
+            case 3 -> hourlyRate = parseDouble((String) aValue);
+            case 4 -> hours = parseInt((String) aValue);
         }
     }
 }

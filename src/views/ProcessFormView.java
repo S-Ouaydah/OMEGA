@@ -5,8 +5,10 @@ import models.resources.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Observable;
+import java.util.Observer;
 
-public class ProcessFormView extends JFrame {
+public class ProcessFormView extends JFrame implements Observer {
     private JTextField processName;
     private JLabel totalCost;
     private JLabel totalDuration;
@@ -34,6 +36,8 @@ public class ProcessFormView extends JFrame {
         return detailsFormPanel;
     }
     public ProcessFormView(Process process) {
+        process.addObserver(this);
+
         setTitle("OMEGA: Process Form");
         setSize(800, 600);
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,12 +117,10 @@ public class ProcessFormView extends JFrame {
             // Iterate through selected rows and remove them from the table
 //            process.removeResource();
             for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
-                if (tableModel.selectedRows.contains(i)) {
-                    process.removeResource(process.getResources().get(i));
+                if (processTable.isRowSelected(i)) {
+                    process.removeResource(process.getResources(type).get(i));
                 }
             }
-            // Clear the selected rows list
-            tableModel.selectedRows.clear();
         });
         // Add buttons to the panel
         JPanel buttonPanel = new JPanel();
@@ -134,5 +136,12 @@ public class ProcessFormView extends JFrame {
 
     public static void main(String[] args) {
         new ProcessFormView(new Process());
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Process process = (Process) o;
+        totalCost.setText(String.valueOf(process.getCost()));
+        totalDuration.setText(String.valueOf(process.getDuration()));
     }
 }

@@ -2,6 +2,9 @@ package models.resources;
 
 import java.io.Serializable;
 
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+
 // Material models.resources.Resource class
 public class MaterialResource extends Resource implements Serializable {
     private double unitCost; // Cost per unit of the material
@@ -37,8 +40,8 @@ public class MaterialResource extends Resource implements Serializable {
     public void setVal(int columnIndex, Object aValue) {
         switch (columnIndex) {
             case 1 -> name = ((String) aValue);
-            case 2 -> unitCost = (double) aValue;
-            case 3 -> quantity = (int) aValue;
+            case 2 -> unitCost = parseDouble((String) aValue);
+            case 3 -> quantity = parseInt((String) aValue);
         }
     }
 }

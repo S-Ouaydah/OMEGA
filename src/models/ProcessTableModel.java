@@ -54,9 +54,9 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
             case 2:
                 return process.getName();
             case 3:
-                return process.getCost();
-            case 4:
                 return process.getStatus();
+            case 4:
+                return process.getCost();
             case 5:
                 return process.getDuration();
             default:
@@ -74,7 +74,7 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
             }
         }
         if (columnIndex == 2) process.setName((String) aValue);
-        if (columnIndex == 4) process.setStatus((String) aValue);
+        if (columnIndex == 3) process.setStatus((String) aValue);
         if (columnIndex == 5) process.setDuration(parseInt((String) aValue));
     }
 

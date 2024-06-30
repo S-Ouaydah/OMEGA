@@ -9,11 +9,15 @@ import java.util.*;
 import static java.lang.Integer.parseInt;
 
 public class ResourceTableModel extends AbstractTableModel implements Observer {
-    private String[] COLUMN_NAMES;
+    private final String[] COLUMN_NAMES;
+    private Process process;
     private List<Resource> resources;
-    public List<Integer> selectedRows = new ArrayList<>();
+    private Resource.resourceTypes type;
+//    public List<Integer> selectedRows = new ArrayList<>();
 
     public ResourceTableModel(Process process, Resource.resourceTypes type) {
+        this.process = process;
+        this.type = type;
         this.resources = process.getResources(type);
         this.COLUMN_NAMES = type.getColumnNames();
         process.addObserver(this);
@@ -61,10 +65,12 @@ public class ResourceTableModel extends AbstractTableModel implements Observer {
 //                return null;
 //        }
     }
+
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         Resource resource = resources.get(rowIndex);
         resource.setVal(columnIndex,aValue);
+        this.process.updateCost();
 //        if (columnIndex == 1) resource.setName((String) aValue);
 //        if (columnIndex == 4) resource.setCost(parseInt((String) aValue));
 //        if (columnIndex == 5) resource.setDuration(parseInt((String) aValue));
@@ -77,6 +83,7 @@ public class ResourceTableModel extends AbstractTableModel implements Observer {
     }
     @Override
     public void update(Observable o, Object arg) {
+        resources = (((Process)o).getResources(type));
         fireTableDataChanged();
     }
 }
