@@ -18,6 +18,7 @@ public class Project implements Serializable{
     private String customer;
     private LocalDate date;
     private List<Task> tasks;
+    private String imagePath;
 
     public Project() {
         this.state = State.Pending;
@@ -90,5 +91,13 @@ public class Project implements Serializable{
 
     public List<Task> getTasks() {
         return tasks;
+    }
+
+    public String geImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String path) {
+        this.imagePath = path;
     }
 }

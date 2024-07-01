@@ -37,11 +37,12 @@ public class ProjectFormView extends JFrame {
         projectDetailsPanel.setBorder(BorderFactory.createTitledBorder("Project Details"));
         return projectDetailsPanel;
     }
-    private JPanel createImagePanel() {
+    private JPanel createImagePanel(Project project) {
         JPanel imagePanel = new JPanel(new BorderLayout());
         prototypeImageLabel = new JLabel();
         prototypeImageLabel.setPreferredSize(new Dimension(200, 200));
         prototypeImageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        prototypeImageLabel.setIcon(new ImageIcon(project.geImagePath()));
         imagePanel.add(prototypeImageLabel, BorderLayout.CENTER);
 
         JButton uploadImageButton = new JButton("Upload Image");
@@ -53,7 +54,8 @@ public class ProjectFormView extends JFrame {
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    ImageIcon imageIcon = new ImageIcon(fileChooser.getSelectedFile().getPath());
+                    project.setImagePath(fileChooser.getSelectedFile().getPath());
+                    ImageIcon imageIcon = new ImageIcon(project.geImagePath());
                     prototypeImageLabel.setIcon(imageIcon);
                 }
             }
@@ -201,34 +203,6 @@ public class ProjectFormView extends JFrame {
                 System.out.println("Project loaded successfully!");
 
                 return projectData;
-//                projectNameField.setText(projectData.getProjectName());
-//                customerField.setText(projectData.getCustomer());
-//                dateField.setText(projectData.getDate().format(DateTimeFormatter.ISO_DATE));
-//
-//                // Loop through loaded tasks and populate tables
-//                for (int i = 0; i < tasksTabbedPane.getTabCount(); i++) {
-//                    JPanel taskPanel = (JPanel) tasksTabbedPane.getComponentAt(i);
-//                    JTable processTable = findProcessTable(taskPanel);
-//
-//                    if (processTable != null) {
-//                        DefaultTableModel tableModel = (DefaultTableModel) processTable.getModel();
-//                        tableModel.setRowCount(0); // Clear existing data
-//
-//                        String taskType = tasksTabbedPane.getTitleAt(i);
-//                        List<Task> tasks = projectData.getTasks();
-//
-//                        for (Task task : tasks) {
-//                            if (task.getType().equals(taskType)) {
-//                                // Found matching task, populate table
-//                                for (Process process : task.getProcesses()) {
-//                                    tableModel.addRow(new Object[]{false, process.getId(), process.getName(),
-//                                            process.getStatus(), process.getCost(), process.getDuration()});
-//                                }
-//                                break; // Only populate the table for the matching task
-//                            }
-//                        }
-//                    }
-//                }
 
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("Error loading project data!, launching new project instead.");
@@ -241,7 +215,7 @@ public class ProjectFormView extends JFrame {
     public ProjectFormView(Project projectData) {
         JPanel mainPanel = createMainPanel();
 
-        JPanel imagePanel = createImagePanel();
+        JPanel imagePanel = createImagePanel(projectData);
         JPanel detailsFormPanel = createDetailsPanel();
 
         mainPanel.add(imagePanel, BorderLayout.WEST);
@@ -282,7 +256,7 @@ public class ProjectFormView extends JFrame {
         setVisible(true);
     }
     public static void main(String[] args) {
-        new ProjectFormView(loadProject("asdad.data"));
+        new ProjectFormView(loadProject("test.data"));
 //        new ProjectFormView(new Project());
 
     }
