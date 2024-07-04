@@ -90,9 +90,13 @@ public class ProcessFormView extends JFrame implements Observer {
         JPanel taskPanel = new JPanel(new BorderLayout());
 
 
-        ResourceTableModel tableModel = new ResourceTableModel(process, type);
+        ResourceTableModel tableModel = new ResourceTableModel(process.getResources(type), type.getColumnNames());
         JTable processTable = new JTable(tableModel);
-
+        tableModel.addTableModelListener(
+            e -> {
+                process.updateCost();
+            }
+        );
         // Create a button for adding empty rows
         JButton addRowButton = new JButton("Add Resource");
         int[] latestProcessId = {0};
@@ -111,6 +115,7 @@ public class ProcessFormView extends JFrame implements Observer {
                     break;
             }
             latestProcessId[0] = newProcessId; // Update the process ID
+            tableModel.setResources(process.getResources(type));
         });
         // Create a button for removing selected rows
         JButton removeButton = new JButton("Remove Selected Processes");
