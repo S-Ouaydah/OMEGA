@@ -19,10 +19,6 @@ import java.util.List;
 
 
 public class ProjectFormView extends JFrame {
-
-    public static ProjectFormView instance = null;
-
-
     private JTextField projectNameField;
     private JTextField customerField;
     private JTextField dateField;
@@ -32,7 +28,7 @@ public class ProjectFormView extends JFrame {
     private JPanel createMainPanel() {
         setTitle("Project Form");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Create project details panel
@@ -146,7 +142,7 @@ public class ProjectFormView extends JFrame {
                 project.setProjectName(projectNameField.getText());
                 project.setCustomer(customerField.getText());
                 project.setDate(LocalDate.parse(dateField.getText(), DateTimeFormatter.ISO_DATE));
-                project.writeToFile(fileName);
+                project.writeToFile(ProjectListView.PROJECTS_DIR + fileName);
 
                 System.out.println("Project saved successfully!");
 
@@ -172,48 +168,6 @@ public class ProjectFormView extends JFrame {
         return taskPanel;
     }
 
-    private List<Process> getProcessesFromTable(JTable processTable) {
-        List<Process> processes = new ArrayList<>();
-        DefaultTableModel tableModel = (DefaultTableModel) processTable.getModel();
-        for (int row = 0; row < tableModel.getRowCount(); row++) {
-            int processId = (int) tableModel.getValueAt(row, 1); // Assuming process ID is in column 1
-            String processName = (String) tableModel.getValueAt(row, 2); // Assuming process name is in column 2
-            String status = (String) tableModel.getValueAt(row, 3); // Assuming status is in column 3
-            double cost = Double.parseDouble((String) tableModel.getValueAt(row, 4)); // Assuming cost is in column 4 (assuming String representation)
-            int duration = Integer.parseInt((String) tableModel.getValueAt(row, 5)); // Assuming duration is in column 5 (assuming String representation)
-            Process process = new Process(processId, processName, status, duration, cost);
-            processes.add(process);
-        }
-        return processes;
-    }
-
-    private static Project loadProject(String fileName) {
-        try {
-                Project projectData = Project.readFromFile(fileName);
-                System.out.println(projectData);
-                System.out.println(projectData.getProjectName());
-                System.out.println(projectData.getCustomer());
-                System.out.println(projectData.getTasks());
-                for (Task task : projectData.getTasks()) {
-                     System.out.println(task.getType());
-                    for (Process process : task.getProcesses()) {
-                        System.out.println(process.getName());
-                        for (Resource resource : process.getResources()) {
-                            System.out.println(resource);
-                        }
-                    }
-                }
-                System.out.println("Project loaded successfully!");
-
-                return projectData;
-
-        } catch (IOException | ClassNotFoundException ex) {
-            System.out.println("Error loading project data!, launching new project instead.");
-            ex.printStackTrace();
-            return new Project();
-//            JOptionPane.showMessageDialog(this, "Error loading project: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     public ProjectFormView(Project projectData) {
         JPanel mainPanel = createMainPanel();
@@ -255,16 +209,13 @@ public class ProjectFormView extends JFrame {
 //            customerField.setText("New Customer");
 //            dateField.setText(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 //        }
-
         setVisible(true);
     }
-
     @Override
     public void dispose() {
         super.dispose();
-        instance = null; // Clear the reference when the form is closed
+        new ProjectListView();
     }
-
     public static void main(String[] args) {
 //        new ProjectFormView(loadProject("test.data"));
 //        new ProjectFormView(new Project());

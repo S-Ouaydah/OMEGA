@@ -14,17 +14,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProjectListView extends JFrame {
 
     private JTable projectTable;
     private JButton newProjectButton;
     private JTextField searchField;
-    private List<String> projectNames;
-    private static final String PROJECTS_DIR = "./";
+    private ArrayList<String> projectNames = new ArrayList<>();
+    public static final String PROJECTS_DIR = "storage/projects/";
 
-    // Constructor
+    //Constructor
     public ProjectListView() {
         setTitle("Project Management");
         setSize(800, 600);
@@ -82,11 +81,8 @@ public class ProjectListView extends JFrame {
         newProjectButton = new JButton("New Project");
         newProjectButton.addActionListener(e -> {
             new ProjectFormView(new Project()).setVisible(true); // Create and show new ProjectFormView
+            dispose();
         });
-
-        // Add refresh button
-        JButton refreshButton = new JButton("Refresh");
-        refreshButton.addActionListener(e -> updateProjectList());
 
         // Layout setup
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -95,29 +91,27 @@ public class ProjectListView extends JFrame {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(newProjectButton);
-        buttonPanel.add(refreshButton);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
         add(mainPanel);
 
-        // Initialize project list
-        projectNames = new ArrayList<>();
-        updateProjectList(); // Call method to update project list on startup
+        ArrayList<String> saved = getSavedProjects(); // Call method to update project list on startup
+        if (saved != null) {
+            for (String project : saved) {
+                tableModel.addRow(new String[]{project});
+            }
+        }
 
         setVisible(true);
     }
 
-    // Method to update the project list
-    public void updateProjectList() {
-        DefaultTableModel tableModel = (DefaultTableModel) projectTable.getModel(); // Cast to DefaultTableModel
-        tableModel.setRowCount(0); // Clear existing rows
-        projectNames.clear(); // Clear the project names list
-
-        // Add rows from existing project files in the src directory
+    //Method to update the project list
+    private ArrayList<String> getSavedProjects() {
+        DefaultTableModel tableModel = (DefaultTableModel) projectTable.getModel();
+        // Add rows from saved project files
         File projectDir = new File(PROJECTS_DIR);
         File[] projectFiles = projectDir.listFiles();
         if (projectFiles != null) {
@@ -127,13 +121,11 @@ public class ProjectListView extends JFrame {
                     projectNames.add(projectName);
                 }
             }
+            return projectNames;
         }
-
-        // Display all projects initially
-        for (String projectName : projectNames) {
-            tableModel.addRow(new String[]{projectName});
-        }
+        else return null;
     }
+
 
     private void filterProjects() {
         DefaultTableModel tableModel = (DefaultTableModel) projectTable.getModel();
@@ -147,6 +139,7 @@ public class ProjectListView extends JFrame {
         }
     }
 
+
     private void openProject(String projectName) {
         // Implement logic to open an existing project from a file
         try {
@@ -156,18 +149,11 @@ public class ProjectListView extends JFrame {
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 Project project = (Project) objectInputStream.readObject();
 
-                // Check if an instance of ProjectFormView is already open
-                if (ProjectFormView.instance == null) {
-                    ProjectFormView.instance = new ProjectFormView(project);
-                    ProjectFormView.instance.setVisible(true);
-                } else {
-                    // Bring the existing instance to the front
-                    ProjectFormView.instance.toFront();
-                    ProjectFormView.instance.repaint(); // Refresh the view
-                }
+                new ProjectFormView(project);
 
                 objectInputStream.close();
                 fileInputStream.close();
+                dispose();
 
             } else {
                 JOptionPane.showMessageDialog(this, "Project file not found.", "Error", JOptionPane.ERROR_MESSAGE);
