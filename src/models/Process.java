@@ -23,8 +23,6 @@ public class Process extends Observable implements Serializable {
     // Constructor
     public Process() {
         this.resources = new ArrayList<>();
-        this.resources.add(new MaterialResource(0,"mattest",222));
-        this.resources.add(new HumanResource(0,"humattest","role",222));
         this.cost = 0;
         this.status = "In Progress";
         this.duration = 0;
@@ -96,7 +94,7 @@ public class Process extends Observable implements Serializable {
     // Assign resource to the process
     public void addResource(Resource resource, int nb) {
         resources.add(resource);
-//        updateCost(nb); // Recalculate cost after assigning a resource
+//        updateCost(); // Recalculate cost after assigning a resource
         setChanged();
         notifyObservers();
     }
@@ -104,7 +102,7 @@ public class Process extends Observable implements Serializable {
     // Remove resource from the process
     public void removeResource(Resource resource) {
         resources.remove(resource);
-//        updateCost(nb); // Recalculate cost after removing a resource
+//        updateCost(); // Recalculate cost after removing a resource
         setChanged();
         notifyObservers();
     }

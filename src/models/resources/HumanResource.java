@@ -1,8 +1,9 @@
 package models.resources;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -11,20 +12,21 @@ public class HumanResource extends Resource implements Serializable {
     private String role; // Employee's role
     private double hourlyRate; // Employee's hourly rate
     private int hours; // Number of hours worked
-    public static HashMap<String,Double> definedRates = new HashMap<>();
+    public static HashMap<String,Double> RoleRates = new HashMap<>();
+    public static HashMap<String,String> EmployeeRoles = new HashMap<>();
 
     // Constructor
     public HumanResource(int id, String name, String role, double hourlyRate) {
         super(id, name);
         this.role = role;
         this.hourlyRate = hourlyRate;
-        definedRates.put(role,hourlyRate);
+        RoleRates.put(role,hourlyRate);
     }
 //    constructor for new human resource using existing rates
     public HumanResource(int id, String name, String role) {
         super(id, name);
         this.role = role;
-        this.hourlyRate = definedRates.get(role);
+        this.hourlyRate = RoleRates.get(role);
     }
 
     // Getters for role, and hourlyRate
