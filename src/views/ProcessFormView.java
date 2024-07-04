@@ -74,6 +74,8 @@ public class ProcessFormView extends JFrame implements Observer {
             if (!totalDuration.getText().isEmpty()){
                 process.setDuration(Integer.parseInt(totalDuration.getText()));
             }
+
+            // update projectlistview or keep the refres button ?
 //          exit the jpanel
             dispose();
         });

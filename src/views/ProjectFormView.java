@@ -20,6 +20,9 @@ import java.util.List;
 
 public class ProjectFormView extends JFrame {
 
+    public static ProjectFormView instance = null;
+
+
     private JTextField projectNameField;
     private JTextField customerField;
     private JTextField dateField;
@@ -147,7 +150,7 @@ public class ProjectFormView extends JFrame {
 
                 System.out.println("Project saved successfully!");
 
-//                dispose(); // Close views.ProjectListView after saving
+                dispose(); // Close views.ProjectListView after saving
 
             } catch (IOException ex){
                 System.out.println("Error saving project data!");
@@ -255,8 +258,15 @@ public class ProjectFormView extends JFrame {
 
         setVisible(true);
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        instance = null; // Clear the reference when the form is closed
+    }
+
     public static void main(String[] args) {
-        new ProjectFormView(loadProject("test.data"));
+//        new ProjectFormView(loadProject("test.data"));
 //        new ProjectFormView(new Project());
 
     }
