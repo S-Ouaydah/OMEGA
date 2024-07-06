@@ -8,10 +8,7 @@ import models.Task;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -140,9 +137,9 @@ public class ProjectFormView extends JFrame {
         ProcessTableModel processTableModel = new ProcessTableModel(task);
         JTable processTable = new JTable(processTableModel);
         processTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        processTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        processTable.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 int row = processTable.rowAtPoint(evt.getPoint());
                 int col = processTable.columnAtPoint(evt.getPoint());
                 if (col != 0) {
@@ -172,10 +169,22 @@ public class ProjectFormView extends JFrame {
         // Add action listener to handle button click
         addRowButton.addActionListener(e -> {
             int newProcessId = latestProcessId[0] + 1;
-            new ProcessFormView(task.addProcess(new Process(newProcessId, "", "", 0, 0)));
+            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, "", "", 0, 0)));
 //            task.addProcess(new Process(newProcessId, "", "", 0, 0));
             latestProcessId[0] = newProcessId; // Update the process ID
             processTableModel.selectedRows.clear();
+            setVisible(false);
+            pv.saveButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setVisible(true);
+                    //is there not a better way to recalculate?
+                    totalCostField.setText(project.getTotalCost() + "");
+                    totalDurationField.setText(project.getTotalDuration() + "");
+                    expectedCompletionDateField.setText("xz/y");
+                    pv.dispose();
+                }
+            });
 
         });
 

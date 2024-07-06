@@ -42,6 +42,7 @@ public class ProcessFormView extends JFrame implements Observer {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
         JPanel detailsFormPanel = createDetailsPanel(process);
         add(detailsFormPanel, BorderLayout.NORTH);
