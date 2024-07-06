@@ -51,15 +51,9 @@ public class ProcessFormView extends JFrame implements Observer {
         resourcesTabbedPane.addTab("Human", createProcessPanel(process, Resource.resourceTypes.Human));
         resourcesTabbedPane.addTab("Material", createProcessPanel(process, Resource.resourceTypes.Material));
         resourcesTabbedPane.addTab("Misc", createProcessPanel(process, Resource.resourceTypes.Misc));
-//        String[] resourceTypes = {"Human", "Material", "MISC"};
-//        for (String resourceType : resourceTypes) {
-//            resourcesTabbedPane.addTab(resourceType, createProcessPanel(process));
-//        }
+
 
         add(resourcesTabbedPane, BorderLayout.CENTER);
-
-//        JScrollPane scrollPane = new JScrollPane(resourcesTable);
-//        add(scrollPane, BorderLayout.SOUTH);
 
         // Create new project button
         saveButton = new JButton("Save Process");
