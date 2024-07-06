@@ -46,17 +46,14 @@ public class ProjectFormView extends JFrame {
 
         JButton uploadImageButton = new JButton("Upload Image");
         imagePanel.add(uploadImageButton, BorderLayout.SOUTH);
-        uploadImageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle image upload
-                JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    project.setImagePath(fileChooser.getSelectedFile().getPath());
-                    ImageIcon imageIcon = new ImageIcon(project.geImagePath());
-                    prototypeImageLabel.setIcon(imageIcon);
-                }
+        uploadImageButton.addActionListener(e -> {
+            // Handle image upload
+            JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                project.setImagePath(fileChooser.getSelectedFile().getPath());
+                ImageIcon imageIcon = new ImageIcon(project.geImagePath());
+                prototypeImageLabel.setIcon(imageIcon);
             }
         });
         return imagePanel;
@@ -118,6 +115,14 @@ public class ProjectFormView extends JFrame {
 
         });
 
+        //create a button for simulation
+        JButton simulateButton = new JButton("Simulate");
+        simulateButton.addActionListener(e -> {
+            // Simulate the task
+            System.out.println("Simulating");
+            SimulationView simulationView = new SimulationView(project);
+        });
+
         // Create a button for removing selected rows
         JButton removeButton = new JButton("Remove Selected Processes");
         // Add action listener to handle button click for removing rows
@@ -158,6 +163,7 @@ public class ProjectFormView extends JFrame {
         // Add buttons to the panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addRowButton);
+        buttonPanel.add(simulateButton);
         buttonPanel.add(removeButton);
         buttonPanel.add(saveButton);
 

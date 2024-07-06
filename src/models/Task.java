@@ -37,6 +37,8 @@ public class Task extends Observable implements Serializable {
     public String getStatus() {
         return status;
     }
+    public double getCost() { return cost; }
+    public int getDuration() { return duration; }
     public void setStatus(String status) {
         this.status = status;
     }
