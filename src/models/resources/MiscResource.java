@@ -17,6 +17,12 @@ public class MiscResource extends Resource implements Serializable {
     public double getCost() {
         return cost;
     }
+
+    @Override
+    public double getDuration() {
+        return 0;
+    }
+
     @Override
     public Object getVal(int columnIndex) {
         return switch (columnIndex) {

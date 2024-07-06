@@ -96,6 +96,7 @@ public class ProcessFormView extends JFrame implements Observer {
         tableModel.addTableModelListener(
             e -> {
                 process.updateCost();
+                process.updateDuration();
             }
         );
         // Create a button for adding empty rows

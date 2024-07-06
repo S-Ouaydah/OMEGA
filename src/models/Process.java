@@ -58,9 +58,7 @@ public class Process extends Observable implements Serializable {
     public double getCost() {
         return cost;
     }
-    public int getDuration() {
-        return duration;
-    }
+    public int getDuration() { return duration; }
     public List<Resource> getResources() {
         return resources;
     }
@@ -115,6 +113,15 @@ public class Process extends Observable implements Serializable {
 //            todo is duration automatically updated too?
         }
         System.out.println("Cost updated" + cost);
+        setChanged();
+        notifyObservers();
+    }
+    public void updateDuration() {
+        duration = 0;
+        for (Resource resource : resources) {
+            duration += resource.getDuration();
+        }
+        System.out.println("Duration updated" + duration);
         setChanged();
         notifyObservers();
     }

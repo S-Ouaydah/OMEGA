@@ -26,7 +26,7 @@ public class SimulationView extends JFrame {
 
         // Initialize labels
         taskTypeLabel = new JLabel("Task: ");
-        statsLabel = new JLabel("<html>Stats:<br>Processes in Task:<br>Cumulative Processes:<br>Tasks Completed:<br>Remaining Cost:<br>Remaining Duration:</html>");
+        statsLabel = new JLabel("<html>Stats:<br>Processes in Task:<br>Cumulative Processes:<br>Tasks Completed:<br>Remaining Cost:<br>Remaining Duration:<br>Cumulative Cost:</html>");
 
         // Create an info panel with padding
         JPanel infoPanel = new JPanel();
@@ -68,7 +68,8 @@ public class SimulationView extends JFrame {
                 "Cumulative Processes: " + calculateCumulativeProcesses() + "<br>" +
                 "Tasks Completed: " + calculateTasksCompleted() + "<br>" +
                 "Remaining Cost: " + calculateRemainingCost() + "<br>" +
-                "Remaining Duration: " + calculateRemainingDuration() +
+                "Remaining Duration: " + calculateRemainingDuration() + "<br>" +
+                "Cumulative Cost: " + calculateCumulativeCost() +
                 "</html>");
     }
 
@@ -111,6 +112,19 @@ public class SimulationView extends JFrame {
         }
 
         return remainingDuration;
+    }
+
+    private double calculateCumulativeCost() {
+        double cumulativeCost = 0;
+        List<Task> tasks = project.getTasks();
+
+        for (int i = 0; i <= currentTaskIndex; i++) {
+            for (Process process : tasks.get(i).getProcesses()) {
+                cumulativeCost += process.getCost();
+            }
+        }
+
+        return cumulativeCost;
     }
 
     private void showNextTask() {

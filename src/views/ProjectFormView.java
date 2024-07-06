@@ -143,16 +143,13 @@ public class ProjectFormView extends JFrame {
                 Process selectedProcess = task.getProcesses().get(row);
                 ProcessFormView pv = new ProcessFormView(selectedProcess);
                 setVisible(false);
-                pv.saveButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        setVisible(true);
-                        //is there not a better way to recalculate?
-                        totalCostField.setText(project.getTotalCost() + "");
-                        totalDurationField.setText(project.getTotalDuration() + "");
-                        expectedCompletionDateField.setText("xz/y");
-                        pv.dispose();
-                    }
+                pv.saveButton.addActionListener(e -> {
+                    setVisible(true);
+                    //is there not a better way to recalculate?
+                    totalCostField.setText(project.getTotalCost() + "");
+                    totalDurationField.setText(project.getTotalDuration() + "");
+                    expectedCompletionDateField.setText("xz/y");
+                    pv.dispose();
                 });
                 }
             }
