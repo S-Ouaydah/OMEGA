@@ -12,7 +12,7 @@ public class ProcessFormView extends JFrame implements Observer {
     private JTextField processName;
     private JLabel totalCost;
     private JLabel totalDuration;
-    private JButton saveButton;
+    public JButton saveButton;
     private JTabbedPane resourcesTabbedPane;
 
     private JPanel createDetailsPanel(Process process){
@@ -40,8 +40,9 @@ public class ProcessFormView extends JFrame implements Observer {
 
         setTitle("OMEGA: Process Form");
         setSize(800, 600);
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
         JPanel detailsFormPanel = createDetailsPanel(process);
         add(detailsFormPanel, BorderLayout.NORTH);

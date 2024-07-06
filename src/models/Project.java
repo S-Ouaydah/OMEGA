@@ -12,7 +12,7 @@ public class Project implements Serializable{
     }
     @Serial
     private static final long serialVersionUID = 1;
-    private double cost;
+    private double totalCost;
     private State state;
     private String projectName;
     private String customer;
@@ -23,6 +23,7 @@ public class Project implements Serializable{
     public Project() {
         this.state = State.Pending;
         this.tasks = Task.getAllTypes();
+        this.date = LocalDate.now();
     }
     public Project(String projectName, String customer, LocalDate date) {
         this.projectName = projectName;
@@ -48,6 +49,29 @@ public class Project implements Serializable{
         return date;
     }
     //  ====  Setters
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public String geImagePath() {
+        return imagePath;
+    }
+
+
+    public double getTotalCost() {
+        this.totalCost = 0;
+        for (Task task : tasks) {
+            totalCost += task.calculateCost();
+        }
+        return totalCost;
+    }
+    public int getTotalDuration() {
+        int totalDuration = 0;
+        for (Task task : tasks) {
+            totalDuration += task.CalculateDuration();
+        }
+        return totalDuration;
+    }
     public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
@@ -59,6 +83,15 @@ public class Project implements Serializable{
     public void setDate(LocalDate date) {
         this.date = date;
     }
+    // task methods
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setImagePath(String path) {
+        this.imagePath = path;
+    }
+
     public void writeToFile(String fileName) throws IOException {
         System.out.println("Writing to file...");
         System.out.println(this.projectName);
@@ -73,31 +106,5 @@ public class Project implements Serializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Project readFromFile(String fileName) throws IOException, ClassNotFoundException {
-        FileInputStream fileInputStream = new FileInputStream(fileName);
-        ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
-        Project projectData = (Project) inputStream.readObject();
-        inputStream.close();
-        return projectData;
-    }
-
-    // task methods
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public String geImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String path) {
-        this.imagePath = path;
     }
 }
