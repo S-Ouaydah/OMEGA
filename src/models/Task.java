@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Observable;
 
 public class Task extends Observable implements Serializable {
-
     public enum Type {
         Design, Preparation, Fabrication, Assembly, Testing
     }
@@ -59,15 +58,21 @@ public class Task extends Observable implements Serializable {
         notifyObservers();
     }
 
-    // Update cost and duration based on processes
-    private void updateCostAndDuration() {
-        cost = 0;
-        duration = 0;
+    public double calculateCost() {
+        double cost = 0;
         for (Process process : processes) {
             cost += process.getCost();
+        }
+        return cost;
+    }
+    public int CalculateDuration() {
+        int duration = 0;
+        for (Process process : processes) {
             duration += process.getDuration();
         }
+        return duration;
     }
+
 
     public Type getType() {
         return taskType;
