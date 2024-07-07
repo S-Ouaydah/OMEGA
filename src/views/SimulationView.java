@@ -53,15 +53,25 @@ public class SimulationView extends JFrame {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Show the first task
+        // Show the first task with proccessses
         if (!project.getTasks().isEmpty()) {
-            showTask(project.getTasks().get(currentTaskIndex));
+            showTask(getFirstTaskWithProcesses(project.getTasks()));
         }
 
         setVisible(true);
     }
-
+    public Task getFirstTaskWithProcesses(List<Task> tasks) {
+        for (Task task : tasks) {
+            if (!task.getProcesses().isEmpty()) {
+                return task;
+            }
+            currentTaskIndex++;
+        }
+        return null; // No tasks with processes found
+    }
     private void showTask(Task task) {
+        System.out.println("Showing task: " + task.getType());
+        System.out.println(currentTaskIndex);
         taskTypeLabel.setText("Task: " + task.getType());
         statsLabel.setText("<html>" +
                 "Processes in Task: " + task.getProcesses().size() + "<br>" +
@@ -129,18 +139,16 @@ public class SimulationView extends JFrame {
 
     private void showNextTask() {
         List<Task> tasks = project.getTasks();
-        while (currentTaskIndex < tasks.size()) {
+        while (currentTaskIndex < tasks.size() -1) {
+            currentTaskIndex++;
             Task currentTask = tasks.get(currentTaskIndex);
-
             if (!currentTask.getProcesses().isEmpty()) {
                 showTask(currentTask);
-                currentTaskIndex++;
                 return;
             }
-            currentTaskIndex++;
         }
 
-        JOptionPane.showMessageDialog(this, "No more tasks with processes.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "End of project.", "Info", JOptionPane.INFORMATION_MESSAGE);
         nextTaskButton.setEnabled(false);
     }
 }

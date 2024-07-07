@@ -110,7 +110,6 @@ public class Process extends Observable implements Serializable {
         cost = 0;
         for (Resource resource : resources) {
             cost += resource.getCost();
-//            todo is duration automatically updated too?
         }
         System.out.println("Cost updated" + cost);
         setChanged();
@@ -119,7 +118,9 @@ public class Process extends Observable implements Serializable {
     public void updateDuration() {
         duration = 0;
         for (Resource resource : resources) {
-            duration += resource.getDuration();
+            if (resource instanceof HumanResource){
+                duration += ((HumanResource) resource).getHours();
+            }
         }
         System.out.println("Duration updated" + duration);
         setChanged();

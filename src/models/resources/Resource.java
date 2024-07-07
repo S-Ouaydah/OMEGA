@@ -34,7 +34,6 @@ public abstract class Resource implements Serializable{
     }
 
     public abstract double getCost(); // Abstract method to get the cost of the resource
-    public abstract double getDuration(); // Abstract method to get the duration of the resource
 
     public String setName(String name) {
         return this.name = name;

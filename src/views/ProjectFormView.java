@@ -108,7 +108,10 @@ public class ProjectFormView extends JFrame {
         detailsFormPanel.add(dateField);
 
         detailsFormPanel.add(new JLabel("Expected Completion Date:"));
-        expectedCompletionDateField = new JLabel("xz/y");
+        //empty if no processes
+        expectedCompletionDateField = project.getTasks().stream().allMatch(task -> task.getProcesses().isEmpty()) ?
+                new JLabel("N/A") :
+                new JLabel(project.getDate().plusDays(project.getTotalDuration() / 24).toString());
         expectedCompletionDateField.setOpaque(true);
         expectedCompletionDateField.setBackground(Color.white);
         detailsFormPanel.add(expectedCompletionDateField);
@@ -153,7 +156,8 @@ public class ProjectFormView extends JFrame {
                     //is there not a better way to recalculate?
                     totalCostField.setText(project.getTotalCost() + "");
                     totalDurationField.setText(project.getTotalDuration() + "");
-                    expectedCompletionDateField.setText("xz/y");
+                    // should be calculated based on the task total duration and start date
+                    expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/24).toString());
                     pv.dispose();
                 });
                 }
@@ -182,8 +186,7 @@ public class ProjectFormView extends JFrame {
                     //is there not a better way to recalculate?
                     totalCostField.setText(project.getTotalCost() + "");
                     totalDurationField.setText(project.getTotalDuration() + "");
-                    expectedCompletionDateField.setText("xz/y");
-                    pv.dispose();
+                    expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/24).toString()                    pv.dispose();
             });
         });
 
