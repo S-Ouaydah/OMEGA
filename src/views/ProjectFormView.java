@@ -1,10 +1,8 @@
 package views;
 
-import models.ProcessTableModel;
-import models.resources.*;
+import models.*;
 import models.Process;
-import models.Project;
-import models.Task;
+import models.resources.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +16,8 @@ import java.util.List;
 
 
 public class ProjectFormView extends JFrame {
-    private JTextField projectNameField;
-    private JTextField customerField;
+    private JLabel projectNameField;
+    private JComboBox<Customer> customerField;
     private JTextField dateField;
     private JLabel expectedCompletionDateField;
     private JLabel totalCostField;
@@ -40,6 +38,18 @@ public class ProjectFormView extends JFrame {
         JPanel projectDetailsPanel = new JPanel(new BorderLayout());
         projectDetailsPanel.setBorder(BorderFactory.createTitledBorder("Project Details"));
         return projectDetailsPanel;
+    }
+    private JPanel createMenuPanel() {
+        JPanel menuPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        //create a button for simulation
+        JButton simulateButton = new JButton("Simulate");
+        simulateButton.addActionListener(e -> {
+            // Simulate the task
+            System.out.println("Simulating");
+            SimulationView simulationView = new SimulationView(project);
+        });
+        menuPanel.add(simulateButton);
+        return menuPanel;
     }
     private JPanel createImagePanel() {
         JPanel imagePanel = new JPanel(new BorderLayout());
@@ -68,26 +78,17 @@ public class ProjectFormView extends JFrame {
         JPanel detailsFormPanel = new JPanel(new GridLayout(3, 4, 5, 5));
 
         detailsFormPanel.add(new JLabel("Project Name:"));
-        projectNameField = new JTextField(project.getProjectName());
-        projectNameField.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                if (projectNameField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Project Name cannot be empty!");
-                    projectNameField.requestFocus();
-                }
-                else {
-                    project.setProjectName(projectNameField.getText());
-                }
-            }
-        });
+        projectNameField = new JLabel(project.getProjectName());
         detailsFormPanel.add(projectNameField);
 
         detailsFormPanel.add(new JLabel("Customer:"));
-        customerField = new JTextField(project.getCustomer());
-        customerField.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                project.setCustomer(customerField.getText());
-            }
+        customerField = new JComboBox<>();
+        for (Customer customer : Customer.getCustomers()) {
+            customerField.addItem(customer);
+        }
+        customerField.setSelectedItem(project.getCustomer());
+        customerField.addActionListener(e -> {
+            project.setCustomer((Customer) customerField.getSelectedItem());
         });
         detailsFormPanel.add(customerField);
 
@@ -183,14 +184,6 @@ public class ProjectFormView extends JFrame {
 
         });
 
-        //create a button for simulation
-        JButton simulateButton = new JButton("Simulate");
-        simulateButton.addActionListener(e -> {
-            // Simulate the task
-            System.out.println("Simulating");
-            SimulationView simulationView = new SimulationView(project);
-        });
-
         // Create a button for removing selected rows
         JButton removeButton = new JButton("Remove Selected Processes");
         // Add action listener to handle button click for removing rows
@@ -209,7 +202,7 @@ public class ProjectFormView extends JFrame {
         //Create a save button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
-            String fileName = projectNameField.getText() + ".data"; // Use project name as file name
+            String fileName = projectNameField.getText().trim() + ".data"; // Use project name as file name
 
             try {
                 project.writeToFile(ProjectListView.PROJECTS_DIR + fileName);
@@ -228,7 +221,6 @@ public class ProjectFormView extends JFrame {
         // Add buttons to the panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addRowButton);
-        buttonPanel.add(simulateButton);
         buttonPanel.add(removeButton);
         buttonPanel.add(saveButton);
 
@@ -243,6 +235,8 @@ public class ProjectFormView extends JFrame {
     public ProjectFormView(Project projectData) {
         this.project = projectData;
         JPanel mainPanel = createMainPanel();
+        JPanel menuPanel = createMenuPanel();
+        mainPanel.add(menuPanel, BorderLayout.NORTH);
 
         JPanel imagePanel = createImagePanel();
         JPanel detailsFormPanel = createDetailsPanel();

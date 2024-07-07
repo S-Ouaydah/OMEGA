@@ -13,23 +13,22 @@ public class Project implements Serializable{
     @Serial
     private static final long serialVersionUID = 1;
     private double totalCost;
-    private State state;
+    private State state; //use this?
     private String projectName;
-    private String customer;
+    private Customer customer;
     private LocalDate date;
     private List<Task> tasks;
     private String imagePath;
 
     public Project() {
         this.state = State.Pending;
-        this.tasks = Task.getAllTypes();
         this.date = LocalDate.now();
+        this.tasks = Task.getAllTypes();
     }
-    public Project(String projectName, String customer, LocalDate date) {
-        this.projectName = projectName;
-        this.customer = customer;
-        this.date = date;
+    public Project(String projectName) {
         this.state = State.Pending;
+        this.projectName = projectName;
+        this.date = LocalDate.now();
         this.tasks = Task.getAllTypes();
 
     }
@@ -41,7 +40,7 @@ public class Project implements Serializable{
         return projectName;
     }
 
-    public String getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
@@ -76,7 +75,7 @@ public class Project implements Serializable{
         this.projectName = projectName;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 

@@ -1,5 +1,6 @@
 package views;
 
+import models.Customer;
 import models.Project;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class ProjectListView extends JFrame {
 
     private JTable projectTable;
-    private JButton newProjectButton;
+    private JButton newProjectButton,newCustomerButton;
     private JTextField searchField;
     private ArrayList<String> projectNames = new ArrayList<>();
     public static final String PROJECTS_DIR = "storage/projects/";
@@ -81,8 +82,28 @@ public class ProjectListView extends JFrame {
         // Create new project button
         newProjectButton = new JButton("New Project");
         newProjectButton.addActionListener(e -> {
-            new ProjectFormView(new Project()).setVisible(true); // Create and show new ProjectFormView
-            dispose();
+            String projectName = JOptionPane.showInputDialog(this, "Enter project name:");
+            if (projectName != null && !projectName.trim().isEmpty()) {
+                new ProjectFormView(new Project(projectName));
+                dispose();
+            }
+        });
+
+        newCustomerButton = new JButton("New Customer");
+        newCustomerButton.addActionListener(e -> {
+            CustomerQuickPanel qp = new CustomerQuickPanel();
+            int customerName = JOptionPane.showConfirmDialog(
+                    this,
+                    qp,
+                    "Enter customer name:",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null
+            );
+            if (customerName == JOptionPane.OK_OPTION) {
+                Customer.addCustomer(new Customer(qp.customerNameField.getText(), qp.customerEmailField.getText(), qp.customerPhoneField.getText()));
+//                dispose();
+            }
         });
 
         // Layout setup
@@ -92,6 +113,7 @@ public class ProjectListView extends JFrame {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(newProjectButton);
+        buttonPanel.add(newCustomerButton);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -164,8 +186,22 @@ public class ProjectListView extends JFrame {
             JOptionPane.showMessageDialog(this, "Failed to open project.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    private static void loadCustomers() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream("storage/customers/customers.data");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            ArrayList<Customer> customers = (ArrayList<Customer>) objectInputStream.readObject();
+            Customer.setCustomers(customers);
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Failed to load Customers.", "Error", JOptionPane.ERROR_MESSAGE);
 
+        }
+    }
     public static void main(String[] args) {
+        loadCustomers();
         new ProjectListView();
     }
 }
