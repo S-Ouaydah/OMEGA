@@ -1,6 +1,7 @@
 package views;
 
 import models.Process;
+import models.Role;
 import models.resources.*;
 
 import javax.swing.*;
@@ -48,9 +49,9 @@ public class ProcessFormView extends JFrame implements Observer {
         add(detailsFormPanel, BorderLayout.NORTH);
 
         resourcesTabbedPane = new JTabbedPane();
-        resourcesTabbedPane.addTab("Human", createProcessPanel(process, Resource.resourceTypes.Human));
-        resourcesTabbedPane.addTab("Material", createProcessPanel(process, Resource.resourceTypes.Material));
-        resourcesTabbedPane.addTab("Misc", createProcessPanel(process, Resource.resourceTypes.Misc));
+        resourcesTabbedPane.addTab("Human", createProcessPanel(process, Resource.resourceTypes.Human, new int[]{0, 3}));
+        resourcesTabbedPane.addTab("Material", createProcessPanel(process, Resource.resourceTypes.Material, new int[]{0}));
+        resourcesTabbedPane.addTab("Misc", createProcessPanel(process, Resource.resourceTypes.Misc,new int[]{0}));
 
 
         add(resourcesTabbedPane, BorderLayout.CENTER);
@@ -70,8 +71,6 @@ public class ProcessFormView extends JFrame implements Observer {
                 process.setDuration(Integer.parseInt(totalDuration.getText()));
             }
 
-            // update projectlistview or keep the refres button ?
-//          exit the jpanel
             dispose();
         });
 
@@ -81,12 +80,19 @@ public class ProcessFormView extends JFrame implements Observer {
 
         setVisible(true);
     }
-    private JPanel createProcessPanel(Process process, Resource.resourceTypes type) {
+    private JPanel createProcessPanel(Process process, Resource.resourceTypes type, int[] cols) {
         JPanel taskPanel = new JPanel(new BorderLayout());
 
 
-        ResourceTableModel tableModel = new ResourceTableModel(process.getResources(type), type.getColumnNames());
+        ResourceTableModel tableModel = new ResourceTableModel(process.getResources(type), type.getColumnNames(),cols);
         JTable processTable = new JTable(tableModel);
+        if (type == Resource.resourceTypes.Human) {
+            JComboBox<Role> roleComboBox = new JComboBox<>();
+            for (Role role : Role.getRoles()) {
+                roleComboBox.addItem(role);
+            }
+            processTable.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(roleComboBox));
+        }
         tableModel.addTableModelListener(
             e -> {
                 process.updateCost();
@@ -101,7 +107,7 @@ public class ProcessFormView extends JFrame implements Observer {
             int newProcessId = latestProcessId[0] + 1;
             switch (type) {
                 case Human:
-                    process.addResource(new HumanResource(newProcessId, "", "Dev",0.0), 1);
+                    process.addResource(new HumanResource(newProcessId, "", null,0), 1);
                     break;
                 case Material:
                     process.addResource(new MaterialResource(newProcessId, "", 0.0), 1);
@@ -122,6 +128,7 @@ public class ProcessFormView extends JFrame implements Observer {
             for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
                 if (processTable.isRowSelected(i)) {
                     process.removeResource(process.getResources(type).get(i));
+                    tableModel.setResources(process.getResources(type));
                 }
             }
         });

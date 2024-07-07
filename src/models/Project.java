@@ -94,10 +94,13 @@ public class Project implements Serializable{
     public void writeToFile(String fileName) throws IOException {
         System.out.println("Writing to file...");
         System.out.println(this.projectName);
-        System.out.println(this.customer);
-        System.out.println(this.tasks);
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+//            make directory if it does not exist
+            File file = new File("storage/projects");
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream("storage/projects/" + fileName + ".data");
             ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
             outputStream.writeObject(this);
             outputStream.close();

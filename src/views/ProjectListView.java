@@ -1,6 +1,7 @@
 package views;
 
 import models.Customer;
+import models.Role;
 import models.Project;
 
 import javax.swing.*;
@@ -10,19 +11,16 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
+
+import static utils.Loaders.*;
 
 public class ProjectListView extends JFrame {
 
     private JTable projectTable;
-    private JButton newProjectButton,newCustomerButton;
+    private JButton newProjectButton,newCustomerButton, newRoleButton;
     private JTextField searchField;
     private ArrayList<String> projectNames = new ArrayList<>();
-    public static final String PROJECTS_DIR = "storage/projects/";
 
     //Constructor
     public ProjectListView() {
@@ -95,7 +93,7 @@ public class ProjectListView extends JFrame {
             int customerName = JOptionPane.showConfirmDialog(
                     this,
                     qp,
-                    "Enter customer name:",
+                    "Creating new customer:",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE,
                     null
@@ -106,6 +104,17 @@ public class ProjectListView extends JFrame {
             }
         });
 
+        newRoleButton = new JButton("New Role");
+        newRoleButton.addActionListener(e -> {
+            String newRole = JOptionPane.showInputDialog("Enter new role name:");
+            if (newRole != null) {
+                double rate = Double.parseDouble(JOptionPane.showInputDialog("Enter hourly rate for " + newRole));
+                Role.addRole(new Role(newRole, rate));
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Can not be empty.");
+            }
+        });
         // Layout setup
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(new JLabel("Search: "), BorderLayout.WEST);
@@ -114,6 +123,7 @@ public class ProjectListView extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(newProjectButton);
         buttonPanel.add(newCustomerButton);
+        buttonPanel.add(newRoleButton);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -121,32 +131,13 @@ public class ProjectListView extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(mainPanel);
 
-        ArrayList<String> saved = getSavedProjects(); // Call method to update project list on startup
+        ArrayList<String> saved = loadProjects(); // Call method to update project list on startup
         if (saved != null) {
             for (String project : saved) {
                 tableModel.addRow(new String[]{project});
             }
         }
-
         setVisible(true);
-    }
-
-    //Method to update the project list
-    private ArrayList<String> getSavedProjects() {
-        DefaultTableModel tableModel = (DefaultTableModel) projectTable.getModel();
-        // Add rows from saved project files
-        File projectDir = new File(PROJECTS_DIR);
-        File[] projectFiles = projectDir.listFiles();
-        if (projectFiles != null) {
-            for (File file : projectFiles) {
-                if (file.isFile() && file.getName().endsWith(".data")) {
-                    String projectName = file.getName().replace(".data", "");
-                    projectNames.add(projectName);
-                }
-            }
-            return projectNames;
-        }
-        else return null;
     }
 
 
@@ -161,47 +152,20 @@ public class ProjectListView extends JFrame {
             }
         }
     }
-
-
     private void openProject(String projectName) {
         // Implement logic to open an existing project from a file
-        try {
-            File projectFile = new File(PROJECTS_DIR + projectName + ".data");
-            if (projectFile.exists()) {
-                FileInputStream fileInputStream = new FileInputStream(projectFile);
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                Project project = (Project) objectInputStream.readObject();
-
-                new ProjectFormView(project);
-
-                objectInputStream.close();
-                fileInputStream.close();
-                dispose();
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Project file not found.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to open project.", "Error", JOptionPane.ERROR_MESSAGE);
+        Project project = loadProject(projectName);
+        if (project != null) {
+            new ProjectFormView(project);
+            dispose();
+            return;
         }
+        JOptionPane.showMessageDialog(this, "Failed to open project.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-    private static void loadCustomers() {
-        try {
-            FileInputStream fileInputStream = new FileInputStream("storage/customers/customers.data");
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            ArrayList<Customer> customers = (ArrayList<Customer>) objectInputStream.readObject();
-            Customer.setCustomers(customers);
-            objectInputStream.close();
-            fileInputStream.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "Failed to load Customers.", "Error", JOptionPane.ERROR_MESSAGE);
 
-        }
-    }
     public static void main(String[] args) {
         loadCustomers();
+        loadRoles();
         new ProjectListView();
     }
 }

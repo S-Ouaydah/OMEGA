@@ -6,10 +6,12 @@ import java.util.*;
 public class ResourceTableModel extends AbstractTableModel {
     private List<Resource> resources;
     private final String[] COLUMN_NAMES;
+    private final int[] NOT_EDITABLE;
 
-    public ResourceTableModel(List<Resource> resources, String[] columnNames) {
+    public ResourceTableModel(List<Resource> resources, String[] columnNames, int[] notEditableColumns) {
         this.resources = resources;
         this.COLUMN_NAMES = columnNames;
+        this.NOT_EDITABLE = notEditableColumns;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class ResourceTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex != 0;
+        return Arrays.stream(NOT_EDITABLE).noneMatch(i -> i == columnIndex);
     }
 
     public void setResources(List<Resource> resources) {

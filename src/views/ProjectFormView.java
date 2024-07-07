@@ -201,10 +201,9 @@ public class ProjectFormView extends JFrame {
         //Create a save button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
-            String fileName = projectNameField.getText().trim() + ".data"; // Use project name as file name
-
+            String fileName = projectNameField.getText().trim(); // Use project name as file name
             try {
-                project.writeToFile(ProjectListView.PROJECTS_DIR + fileName);
+                project.writeToFile(fileName);
 
                 System.out.println("Project saved successfully!");
 

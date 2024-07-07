@@ -37,7 +37,7 @@ public class Customer implements Serializable {
     public static ArrayList<Customer> getCustomers() {
         return customers;
     }
-    public static void setCustomers(ArrayList<Customer> customers) {
+    public static void initCustomers(ArrayList<Customer> customers) {
         Customer.customers = customers;
     }
     public static void addCustomer(Customer customer) {
