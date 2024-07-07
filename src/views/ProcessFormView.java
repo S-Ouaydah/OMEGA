@@ -59,10 +59,6 @@ public class ProcessFormView extends JFrame implements Observer {
         // Create new project button
         saveButton = new JButton("Save Process");
         saveButton.addActionListener(e -> {
-            if (processName.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter the name of the process", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             process.setName(processName.getText());
             if (!totalCost.getText().isEmpty()) {
                 process.setCost(Double.parseDouble(totalCost.getText()));
@@ -70,7 +66,9 @@ public class ProcessFormView extends JFrame implements Observer {
             if (!totalDuration.getText().isEmpty()){
                 process.setDuration(Integer.parseInt(totalDuration.getText()));
             }
-
+            if (processName.getText().isEmpty()) {
+                return;
+            }
             dispose();
         });
 
@@ -147,7 +145,9 @@ public class ProcessFormView extends JFrame implements Observer {
     public static void main(String[] args) {
         new ProcessFormView(new Process());
     }
-
+    public JTextField getProcessName() {
+        return processName;
+    }
     @Override
     public void update(Observable o, Object arg) {
         Process process = (Process) o;

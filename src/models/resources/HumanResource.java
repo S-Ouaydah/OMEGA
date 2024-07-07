@@ -9,7 +9,6 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class HumanResource extends Resource implements Serializable {
-    private String name;
     private Role role; // Employee's role
     private int hours; // Number of hours worked
 //    public static HashMap<String,Double> RoleRates = new HashMap<>();
@@ -19,6 +18,7 @@ public class HumanResource extends Resource implements Serializable {
     public HumanResource(int id, String name, Role role, int hours) {
         super(id, name);
         this.role = role;
+        this.hours = hours;
     }
     // Getters for role, and hourlyRate
     public Role getRole() {

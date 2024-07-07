@@ -145,6 +145,10 @@ public class ProjectFormView extends JFrame {
                 ProcessFormView pv = new ProcessFormView(selectedProcess);
                 setVisible(false);
                 pv.saveButton.addActionListener(e -> {
+                    if (pv.getProcessName().getText().trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(pv, "Please enter the name of the process", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     setVisible(true);
                     //is there not a better way to recalculate?
                     totalCostField.setText(project.getTotalCost() + "");
@@ -169,18 +173,18 @@ public class ProjectFormView extends JFrame {
             latestProcessId[0] = newProcessId; // Update the process ID
             processTableModel.selectedRows.clear();
             setVisible(false);
-            pv.saveButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+            pv.saveButton.addActionListener(ev -> {
+                    if (pv.getProcessName().getText().trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(pv, "Please enter the name of the process", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     setVisible(true);
                     //is there not a better way to recalculate?
                     totalCostField.setText(project.getTotalCost() + "");
                     totalDurationField.setText(project.getTotalDuration() + "");
                     expectedCompletionDateField.setText("xz/y");
                     pv.dispose();
-                }
             });
-
         });
 
         // Create a button for removing selected rows
