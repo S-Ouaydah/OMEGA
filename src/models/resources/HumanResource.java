@@ -44,11 +44,6 @@ public class HumanResource extends Resource implements Serializable {
         return hourlyRate * hours;
     }
 
-    @Override
-    public double getDuration() {
-        return hours;
-    }
-
     public int getHours() {
         return hours;
     }
