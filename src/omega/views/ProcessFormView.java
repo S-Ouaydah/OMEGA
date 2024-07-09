@@ -142,9 +142,9 @@ public class ProcessFormView extends JFrame implements Observer {
         return taskPanel;
     }
 
-    public static void main(String[] args) {
-        new ProcessFormView(new Process());
-    }
+//    public static void main(String[] args) {
+//        new ProcessFormView(new Process());
+//    }
     public JTextField getProcessName() {
         return processName;
     }

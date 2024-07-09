@@ -8,10 +8,13 @@ import omega.views.ProjectFormView;
 import omega.views.RoleQuickPanel;
 import omega.views.SearchListView;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import static omega.utils.Loaders.*;
 
@@ -98,11 +101,11 @@ public class MainApp extends JFrame {
                     try {
                         double rate = Double.parseDouble(qp.rolePay.getText());
                         Role.addRole(new Role(qp.roleName.getText(), rate));
+                        roleList.addName(qp.roleName.getText());
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(this, "Pay must be a number");
                     }
                 }
-                roleList.addName(qp.roleName.getText());
 //                dispose();
             }
         });
@@ -158,6 +161,18 @@ public class MainApp extends JFrame {
         JOptionPane.showMessageDialog(this, "Failed to get role rate.", "Error", JOptionPane.ERROR_MESSAGE);
     }
     public static void main(String[] args) {
-        new MainApp();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame frame = new MainApp();
+                try {
+                    ArrayList<Image> icons = new ArrayList<Image>(5);
+                    icons.add(ImageIO.read(getClass().getResource("logo1.png")));
+                    icons.add(ImageIO.read(getClass().getResource("assets/logo2.png")));
+                    frame.setIconImages(icons);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

@@ -279,9 +279,9 @@ public class ProjectFormView extends JFrame {
         super.dispose();
         new MainApp();
     }
-    public static void main(String[] args) {
-//        new ProjectFormView(loadProject("test.data"));
-        new ProjectFormView(new Project());
-
-    }
+//    public static void main(String[] args) {
+////        new ProjectFormView(loadProject("test.data"));
+//        new ProjectFormView(new Project());
+//
+//    }
 }
