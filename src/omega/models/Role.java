@@ -14,8 +14,8 @@ public class Role implements Serializable {
         roles.add(role);
         saveRoles();
     }
-    public static void removeRole(Role role) {
-        roles.remove(role);
+    public static void removeRole(int index) {
+        roles.remove(index);
         saveRoles();
     }
     public static void saveRoles() {

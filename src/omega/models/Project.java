@@ -110,6 +110,12 @@ public class Project implements Serializable{
             e.printStackTrace();
         }
     }
+    public static void deleteFromFiles(String projectName) {
+        File file = new File("storage/projects/" + projectName + ".data");
+        if (file.exists()) {
+            file.delete();
+        }
+    }
     public Resource[] getResources() {
         List<Resource> resources = new ArrayList<>();
         for (Task task : tasks) {

@@ -64,7 +64,7 @@ public class ProjectFormView extends JFrame {
         prototypeImageLabel = new JLabel();
         prototypeImageLabel.setPreferredSize(new Dimension(200, 200));
         prototypeImageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        prototypeImageLabel.setIcon(new ImageIcon(project.geImagePath()));
+        prototypeImageLabel.setIcon(getAndScaleImage(project.geImagePath()));
         imagePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 20));
         imagePanel.add(prototypeImageLabel, BorderLayout.CENTER);
 
@@ -76,11 +76,16 @@ public class ProjectFormView extends JFrame {
             int returnValue = fileChooser.showOpenDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 project.setImagePath(fileChooser.getSelectedFile().getPath());
-                ImageIcon imageIcon = new ImageIcon(project.geImagePath());
-                prototypeImageLabel.setIcon(imageIcon);
+                prototypeImageLabel.setIcon(getAndScaleImage(project.geImagePath()));
             }
         });
         return imagePanel;
+    }
+    private ImageIcon getAndScaleImage(String path) {
+        ImageIcon imageIcon = new ImageIcon(path);
+        Image image = imageIcon.getImage();
+        Image scaledImage = image.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
     private JPanel createDetailsPanel() {
         JPanel detailsFormPanel = new JPanel(new GridLayout(3, 4, 5, 5));

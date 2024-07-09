@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class SearchListView extends JPanel {
     private JTable searchTable;
-    private JButton newButton;
+    private JButton newButton,deleteButton;
     private JTextField searchField;
     private ArrayList<String> listNames = new ArrayList<>();
     
@@ -45,13 +45,17 @@ public class SearchListView extends JPanel {
             }
         }
         newButton = new JButton("New " + subject);
+        deleteButton = new JButton("Delete " + subject);
 
         JPanel searchPanel = new JPanel();
         searchPanel.add(new JLabel("search:"), BorderLayout.EAST);
         searchPanel.add(searchField, BorderLayout.CENTER);
         add(searchPanel, BorderLayout.NORTH);
         add(new JScrollPane(searchTable), BorderLayout.CENTER);
-        add(newButton, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(newButton);
+        buttonPanel.add(deleteButton);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
     private void searchFilter() {
         DefaultTableModel tableModel = (DefaultTableModel) searchTable.getModel();
@@ -69,9 +73,16 @@ public class SearchListView extends JPanel {
     public JButton getNewButton() {
         return newButton;
     }
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
 
     public void addName(String name) {
         listNames.add(name);
+        searchFilter();
+    }
+    public void removeName(int index) {
+        listNames.remove(index);
         searchFilter();
     }
 }

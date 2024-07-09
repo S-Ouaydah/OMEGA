@@ -16,7 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 
 import static omega.utils.Loaders.*;
 
@@ -54,6 +53,17 @@ public class MainApp extends JFrame {
                 new ProjectFormView(new Project(projectName));
                 dispose();
             }
+            else {
+                JOptionPane.showMessageDialog(this, "Project name cannot be empty");
+            }
+        });
+        projectList.getDeleteButton().addActionListener(e -> {
+            int selectedRow = projectTable.getSelectedRow();
+            String projectName = (String) projectTable.getValueAt(selectedRow, 0);
+            if (selectedRow >= 0) {
+                Project.deleteFromFiles(projectName);
+                projectList.removeName(selectedRow);
+            }
         });
         //customer Tab
         SearchListView customerList = new SearchListView("Customer", loadCustomers());
@@ -71,6 +81,13 @@ public class MainApp extends JFrame {
                 Customer.addCustomer(new Customer(qp.customerNameField.getText(), qp.customerEmailField.getText(), qp.customerPhoneField.getText()));
                 customerList.addName(qp.customerNameField.getText());
 //                dispose();
+            }
+        });
+        customerList.getDeleteButton().addActionListener(e -> {
+            int selectedRow = customerList.getSearchTable().getSelectedRow();
+            if (selectedRow >= 0) {
+                Customer.removeCustomer(selectedRow);
+                customerList.removeName(selectedRow);
             }
         });
         customerList.getSearchTable().addMouseListener(new MouseAdapter() {
@@ -109,6 +126,13 @@ public class MainApp extends JFrame {
                     }
                 }
 //                dispose();
+            }
+        });
+        roleList.getDeleteButton().addActionListener(e -> {
+            int selectedRow = roleList.getSearchTable().getSelectedRow();
+            if (selectedRow >= 0) {
+                Role.removeRole(selectedRow);
+                roleList.removeName(selectedRow);
             }
         });
         roleList.getSearchTable().addMouseListener(new MouseAdapter() {
@@ -162,15 +186,6 @@ public class MainApp extends JFrame {
         }
         JOptionPane.showMessageDialog(this, "Failed to get role rate.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                MainApp frame = new MainApp();
-                frame.setLogo();
-            }
-        });
-    }
-//    set logo
     private void setLogo() {
         final URL imageResource = Main.class.getClassLoader().getResource("omega/assets/logo2.png");
         final Image image = Toolkit.getDefaultToolkit().getImage(imageResource);
@@ -189,5 +204,13 @@ public class MainApp extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                MainApp frame = new MainApp();
+                frame.setLogo();
+            }
+        });
     }
 }

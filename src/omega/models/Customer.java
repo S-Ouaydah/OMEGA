@@ -40,8 +40,8 @@ public class Customer implements Serializable {
         customers.add(customer);
         saveCustomers();
     }
-    public static void removeCustomer(Customer customer) {
-        customers.remove(customer);
+    public static void removeCustomer(int index) {
+        customers.remove(index);
         saveCustomers();
     }
     public static void saveCustomers() {
