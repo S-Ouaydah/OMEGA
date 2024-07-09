@@ -14,6 +14,7 @@ public class ProcessFormView extends JFrame implements Observer {
     private JLabel totalCost;
     private JLabel totalDuration;
     public JButton saveButton;
+    public JButton markAsDoneButton;
     private JTabbedPane resourcesTabbedPane;
 
     private JPanel createDetailsPanel(Process process){
@@ -71,9 +72,16 @@ public class ProcessFormView extends JFrame implements Observer {
             }
             dispose();
         });
+        // Create new mark as done button
+        markAsDoneButton = "In Progress".equals(process.getStatus()) ? new JButton("Mark as Done") : new JButton("Mark as In Progress");
+        markAsDoneButton.addActionListener(e -> {
+            process.toggleStatus();
+            markAsDoneButton.setText("In Progress".equals(process.getStatus()) ? "Mark as Done" : "Mark as In Progress");
+        });
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(saveButton);
+        buttonPanel.add(markAsDoneButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         setVisible(true);

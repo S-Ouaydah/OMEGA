@@ -136,6 +136,14 @@ public class Process extends Observable implements Serializable {
     public void setCost(double cost) {
         this.cost = cost;
     }
-
+    public void toggleStatus() {
+        if ("In Progress".equals(status)) {
+            status = "Completed";
+        } else {
+            status = "In Progress";
+        }
+        setChanged();
+        notifyObservers();
+    }
 
 }

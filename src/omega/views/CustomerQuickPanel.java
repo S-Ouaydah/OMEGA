@@ -1,6 +1,8 @@
 package omega.views;
 
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CustomerQuickPanel extends JPanel {
     public JTextField customerNameField, customerEmailField, customerPhoneField;
@@ -20,6 +22,15 @@ public class CustomerQuickPanel extends JPanel {
 
         JLabel customerPhone = new JLabel("Customer Phone:");
         customerPhoneField = new JTextField();
+        customerPhoneField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != '+') {
+                    e.consume();
+                }
+            }
+        });
         add(customerPhone);
         add(customerPhoneField);
 
