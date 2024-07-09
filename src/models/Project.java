@@ -1,5 +1,7 @@
 package models;
 
+import models.resources.Resource;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -108,5 +110,14 @@ public class Project implements Serializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public Resource[] getResources() {
+        List<Resource> resources = new ArrayList<>();
+        for (Task task : tasks) {
+            task.getProcesses().forEach(process -> {
+                resources.addAll(process.getResources());
+            });
+        }
+        return resources.toArray(new Resource[0]);
     }
 }

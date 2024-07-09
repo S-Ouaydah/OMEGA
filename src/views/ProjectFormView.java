@@ -48,6 +48,15 @@ public class ProjectFormView extends JFrame {
             System.out.println("Simulating");
             SimulationView simulationView = new SimulationView(project);
         });
+        //create a button for advanced stats
+        JButton filterButton = new JButton("Filter");
+        filterButton.addActionListener(e -> {
+            // Show advanced stats
+            System.out.println("Showing advanced stats");
+            FilterView advancedStatsView = new FilterView(project);
+        });
+
+        menuPanel.add(filterButton);
         menuPanel.add(simulateButton);
         return menuPanel;
     }
