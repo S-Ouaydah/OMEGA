@@ -1,21 +1,25 @@
-package models;
+package omega.models;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Role implements Serializable {
     private String name;
     private double hourlyRate;
-//    private static HashMap<String, Double> roleRateMap = new HashMap<>();
     private static ArrayList<Role> roles = new ArrayList<>();
     public static void initRoles(ArrayList<Role> roles) {
         Role.roles = roles;}
     public static ArrayList<Role> getRoles() {return roles;}
     public static void addRole(Role role) {
         roles.add(role);
+        saveRoles();
+    }
+    public static void removeRole(Role role) {
+        roles.remove(role);
+        saveRoles();
+    }
+    public static void saveRoles() {
         try {
-//            create folder if it does not exist
             File file = new File("storage/roles");
             if (!file.exists()) {
                 file.mkdirs();

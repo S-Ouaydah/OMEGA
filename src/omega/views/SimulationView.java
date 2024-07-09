@@ -1,8 +1,8 @@
-package views;
+package omega.views;
 
-import models.Project;
-import models.Task;
-import models.Process;
+import omega.models.Project;
+import omega.models.Task;
+import omega.models.Process;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

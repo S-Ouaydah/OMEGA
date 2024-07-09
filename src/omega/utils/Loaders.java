@@ -1,15 +1,14 @@
-package utils;
+package omega.utils;
 
-import models.Customer;
-import models.Role;
-import models.Project;
+import omega.models.Customer;
+import omega.models.Role;
+import omega.models.Project;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Loaders {
     public static ArrayList<String> loadProjects() {
@@ -46,7 +45,7 @@ public class Loaders {
         return null;
     }
 
-    public static void loadCustomers() {
+    public static ArrayList<String> loadCustomers() {
         try {
             FileInputStream fileInputStream = new FileInputStream("storage/customers/customers.data");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -54,21 +53,31 @@ public class Loaders {
             Customer.initCustomers(customers);
             objectInputStream.close();
             fileInputStream.close();
+            ArrayList<String> customerNames = new ArrayList<>();
+            for (Customer customer : customers) {
+                customerNames.add(customer.getName());
+            }
+            return customerNames;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            return null;
         }
     }
-    public static void loadRoles() {
+    public static ArrayList<String> loadRoles() {
         try {
             FileInputStream fileInputStream = new FileInputStream("storage/roles/roles.data");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             Role.initRoles((ArrayList<Role>) objectInputStream.readObject());
             objectInputStream.close();
             fileInputStream.close();
+            ArrayList<String> roleNames = new ArrayList<>();
+            for (Role role : Role.getRoles()) {
+                roleNames.add(role.toString());
+            }
+            return roleNames;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-//            print current directory
-            System.out.println(System.getProperty("user.dir"));
+            return null;
         }
     }
 }

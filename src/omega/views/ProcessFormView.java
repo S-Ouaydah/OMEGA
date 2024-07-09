@@ -1,8 +1,8 @@
-package views;
+package omega.views;
 
-import models.Process;
-import models.Role;
-import models.resources.*;
+import omega.models.Process;
+import omega.models.Role;
+import omega.models.resources.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,17 +101,17 @@ public class ProcessFormView extends JFrame implements Observer {
         JButton addRowButton = new JButton("Add Resource");
         int[] latestProcessId = {0};
         addRowButton.addActionListener(e -> {
-            System.out.println("Add Resource clicked");
             int newProcessId = latestProcessId[0] + 1;
+            String name = JOptionPane.showInputDialog("Enter Resource Name");
             switch (type) {
                 case Human:
-                    process.addResource(new HumanResource(newProcessId, "", null,0), 1);
+                    process.addResource(new HumanResource(newProcessId, name, null,0), 1);
                     break;
                 case Material:
-                    process.addResource(new MaterialResource(newProcessId, "", 0.0), 1);
+                    process.addResource(new MaterialResource(newProcessId, name, 0.0), 1);
                     break;
                 case Misc:
-                    process.addResource(new MiscResource(newProcessId, "", 0.0), 1);
+                    process.addResource(new MiscResource(newProcessId, name, 0.0), 1);
                     break;
             }
             latestProcessId[0] = newProcessId; // Update the process ID

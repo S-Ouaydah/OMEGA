@@ -1,11 +1,11 @@
-package models.resources;
+package omega.models.resources;
 
 import java.io.Serializable;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
-// Material models.resources.Resource class
+// Material omega.models.resources.Resource class
 public class MaterialResource extends Resource implements Serializable {
     private double unitCost; // Cost per unit of the material
     private int quantity; // Quantity of the material

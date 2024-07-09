@@ -1,9 +1,9 @@
-package views;
+package omega.views;
 
 import javax.swing.*;
 
 public class CustomerQuickPanel extends JPanel {
-    JTextField customerNameField, customerEmailField, customerPhoneField;
+    public JTextField customerNameField, customerEmailField, customerPhoneField;
     public CustomerQuickPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("Quick Panel"));

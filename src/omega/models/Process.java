@@ -1,11 +1,9 @@
-package models;
+package omega.models;
 
-import models.resources.HumanResource;
-import models.resources.MaterialResource;
-import models.resources.Resource;
+import omega.models.resources.HumanResource;
+import omega.models.resources.MaterialResource;
+import omega.models.resources.Resource;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

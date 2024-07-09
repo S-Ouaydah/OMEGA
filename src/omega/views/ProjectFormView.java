@@ -1,8 +1,8 @@
-package views;
+package omega.views;
 
-import models.*;
-import models.Process;
-import models.resources.*;
+import omega.MainApp;
+import omega.models.*;
+import omega.models.Process;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -133,7 +132,7 @@ public class ProjectFormView extends JFrame {
         detailsFormPanel.add(totalCostField);
 
         detailsFormPanel.add(new JLabel("Total Duration:"));
-        totalDurationField = new JLabel(project.getTotalDuration() + "");
+        totalDurationField = new JLabel(project.getTotalDuration() + "h");
         totalDurationField.setOpaque(true);
         totalDurationField.setBackground(Color.white);
         detailsFormPanel.add(totalDurationField);
@@ -178,10 +177,10 @@ public class ProjectFormView extends JFrame {
         JButton addRowButton = new JButton("Add Process");
         // Track the latest process ID
         int[] latestProcessId = {0};
-        // Add action listener to handle button click
         addRowButton.addActionListener(e -> {
             int newProcessId = latestProcessId[0] + 1;
-            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, "", "", 0, 0)));
+            String name = JOptionPane.showInputDialog("Enter Process Name");
+            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, name, "", 0, 0)));
 //            task.addProcess(new Process(newProcessId, "", "", 0, 0));
             latestProcessId[0] = newProcessId; // Update the process ID
             processTableModel.selectedRows.clear();
@@ -194,7 +193,7 @@ public class ProjectFormView extends JFrame {
                     setVisible(true);
                     //is there not a better way to recalculate?
                     totalCostField.setText(project.getTotalCost() + "");
-                    totalDurationField.setText(project.getTotalDuration() + "");
+                    totalDurationField.setText(project.getTotalDuration() + " h");
                     expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/24).toString());
                     pv.dispose();
             });
@@ -224,7 +223,7 @@ public class ProjectFormView extends JFrame {
 
                 System.out.println("Project saved successfully!");
 
-                dispose(); // Close views.ProjectListView after saving
+                dispose(); // Close omega.views.ProjectListView after saving
 
             } catch (IOException ex){
                 System.out.println("Error saving project data!");
@@ -278,7 +277,7 @@ public class ProjectFormView extends JFrame {
     @Override
     public void dispose() {
         super.dispose();
-        new ProjectListView();
+        new MainApp();
     }
     public static void main(String[] args) {
 //        new ProjectFormView(loadProject("test.data"));

@@ -1,4 +1,4 @@
-package models.resources;
+package omega.models.resources;
 
 import java.io.Serializable;
 

@@ -1,11 +1,10 @@
-package models;
+package omega.models;
 
-import models.resources.Resource;
+import omega.models.resources.Resource;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Project implements Serializable{

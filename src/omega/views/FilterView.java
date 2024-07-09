@@ -1,17 +1,15 @@
-package views;
+package omega.views;
 
-import models.Project;
-import models.Task;
-import models.resources.Resource;
-import models.Process;
+import omega.models.Project;
+import omega.models.Task;
+import omega.models.resources.Resource;
+import omega.models.Process;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FilterView extends JFrame {
     private Project project;

@@ -1,11 +1,7 @@
-package models;
+package omega.models;
 
-import views.ProjectFormView;
-
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Customer implements Serializable {
@@ -42,6 +38,13 @@ public class Customer implements Serializable {
     }
     public static void addCustomer(Customer customer) {
         customers.add(customer);
+        saveCustomers();
+    }
+    public static void removeCustomer(Customer customer) {
+        customers.remove(customer);
+        saveCustomers();
+    }
+    public static void saveCustomers() {
         try {
 //            create folder if it does not exist
             File file = new File("storage/customers");
@@ -60,6 +63,12 @@ public class Customer implements Serializable {
 
     public String getName() {
         return name;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getPhone() {
+        return phone;
     }
 
     public void setName(String name) {

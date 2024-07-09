@@ -1,4 +1,4 @@
-package models;
+package omega.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -88,8 +88,8 @@ public class Task extends Observable implements Serializable {
         return new ArrayList<>(List.of(new Task(Type.Design), new Task(Type.Preparation), new Task(Type.Fabrication), new Task(Type.Assembly), new Task(Type.Testing)));
     }
 
-//    public static List<models.Task> getTasksFromUI() {
-//        List<models.Task> tasks = new ArrayList<>();
+//    public static List<omega.models.Task> getTasksFromUI() {
+//        List<omega.models.Task> tasks = new ArrayList<>();
 //        // Add tasks from UI to the list
 //
 //        return tasks;

@@ -1,11 +1,9 @@
-package models.resources;
+package omega.models.resources;
 
-import models.Role;
+import omega.models.Role;
 
 import java.io.*;
-import java.util.HashMap;
 
-import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class HumanResource extends Resource implements Serializable {

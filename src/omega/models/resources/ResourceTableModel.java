@@ -1,4 +1,4 @@
-package models.resources;
+package omega.models.resources;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
