@@ -1,5 +1,6 @@
 package omega;
 
+import com.sun.tools.javac.Main;
 import omega.models.Customer;
 import omega.models.Role;
 import omega.models.Project;
@@ -14,6 +15,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static omega.utils.Loaders.*;
@@ -163,16 +165,29 @@ public class MainApp extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new MainApp();
-                try {
-                    ArrayList<Image> icons = new ArrayList<Image>(5);
-                    icons.add(ImageIO.read(getClass().getResource("logo1.png")));
-                    icons.add(ImageIO.read(getClass().getResource("assets/logo2.png")));
-                    frame.setIconImages(icons);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                MainApp frame = new MainApp();
+                frame.setLogo();
             }
         });
+    }
+//    set logo
+    private void setLogo() {
+        final URL imageResource = Main.class.getClassLoader().getResource("omega/assets/logo2.png");
+        final Image image = Toolkit.getDefaultToolkit().getImage(imageResource);
+        final Taskbar taskbar = Taskbar.getTaskbar();
+        try {
+            //set icon for mac os (and other systems which do support this method)
+            taskbar.setIconImage(image);
+        } catch (final UnsupportedOperationException e) {
+            System.out.println("The os does not support: 'taskbar.setIconImage'");
+        } catch (final SecurityException e) {
+            System.out.println("There was a security exception for: 'taskbar.setIconImage'");
+        }
+        try {
+            Image windImage = ImageIO.read(getClass().getResource("assets/logo2.png"));
+            setIconImage(windImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
