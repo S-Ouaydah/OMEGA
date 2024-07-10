@@ -98,7 +98,7 @@ public class SimulationView extends JFrame {
     }
 
     private int calculateTasksCompleted() {
-        return currentTaskIndex;
+        return currentTaskIndex+1;
     }
 
     private double calculateRemainingCost() {

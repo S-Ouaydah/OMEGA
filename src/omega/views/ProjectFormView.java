@@ -5,6 +5,8 @@ import omega.models.*;
 import omega.models.Process;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -108,11 +110,13 @@ public class ProjectFormView extends JFrame {
 
         detailsFormPanel.add(new JLabel("Start Date:"));
         dateField = new JTextField(project.getDate().toString());
+        // on focus lost, update the date and the expected date
         dateField.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent evt) {
                 try {
                     LocalDate date = LocalDate.parse(dateField.getText(), DateTimeFormatter.ISO_DATE);
                     project.setDate(date);
+                    expectedCompletionDateField.setText(date.plusDays(project.getTotalDuration() / 8).toString());
                 } catch (DateTimeParseException e) {
                     JOptionPane.showMessageDialog(null, "Invalid date format (use YYYY-MM-DD).");
                     dateField.requestFocus();
@@ -125,7 +129,7 @@ public class ProjectFormView extends JFrame {
         //empty if no processes
         expectedCompletionDateField = project.getTasks().stream().allMatch(task -> task.getProcesses().isEmpty()) ?
                 new JLabel("N/A") :
-                new JLabel(project.getDate().plusDays(project.getTotalDuration() / 24).toString());
+                new JLabel(project.getDate().plusDays(project.getTotalDuration() / 8).toString());
         expectedCompletionDateField.setOpaque(true);
         expectedCompletionDateField.setBackground(Color.white);
         detailsFormPanel.add(expectedCompletionDateField);
@@ -171,7 +175,7 @@ public class ProjectFormView extends JFrame {
                     totalCostField.setText(project.getTotalCost() + "");
                     totalDurationField.setText(project.getTotalDuration() + "");
                     // should be calculated based on the task total duration and start date
-                    expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/24).toString());
+                    expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/8).toString());
                     pv.dispose();
                 });
                 }
@@ -187,7 +191,7 @@ public class ProjectFormView extends JFrame {
             String newProcessId = UUID.randomUUID().toString();;
             String name = JOptionPane.showInputDialog("Enter Process Name");
             if (name == null) return; // Cancel button clicked
-            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, name, "InProgress", 0, 0)));
+            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, name, "In Progress", 0, 0)));
 //            task.addProcess(new Process(newProcessId, "", "", 0, 0));
             processTableModel.selectedRows.clear();
             setVisible(false);
