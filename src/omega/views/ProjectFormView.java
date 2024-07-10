@@ -200,7 +200,8 @@ public class ProjectFormView extends JFrame {
                     //is there not a better way to recalculate?
                     totalCostField.setText(project.getTotalCost() + "");
                     totalDurationField.setText(project.getTotalDuration() + " h");
-                    expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/24).toString());
+                    //People work 8h/day not 24 ;)
+                    expectedCompletionDateField.setText(project.getDate().plusDays(project.getTotalDuration()/8).toString());
                     pv.dispose();
             });
         });

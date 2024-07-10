@@ -130,7 +130,7 @@ public class ProcessFormView extends JFrame implements Observer {
             tableModel.setResources(process.getResources(type));
         });
         // Create a button for removing selected rows
-        JButton removeButton = new JButton("Remove Selected Processes");
+        JButton removeButton = new JButton("Remove Selected Resource");
         // Add action listener to handle button click for removing rows
         removeButton.addActionListener(e -> {
             // Iterate through selected rows and remove them from the table
