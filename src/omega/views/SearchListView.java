@@ -76,7 +76,9 @@ public class SearchListView extends JPanel {
     public JButton getDeleteButton() {
         return deleteButton;
     }
-
+    public ArrayList<String> getListNames() {
+        return listNames;
+    }
     public void addName(String name) {
         listNames.add(name);
         searchFilter();

@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.UUID;
 
 public class ProcessFormView extends JFrame implements Observer {
     private JTextField processName;
@@ -107,10 +108,14 @@ public class ProcessFormView extends JFrame implements Observer {
         );
         // Create a button for adding empty rows
         JButton addRowButton = new JButton("Add Resource");
-        int[] latestProcessId = {0};
         addRowButton.addActionListener(e -> {
-            int newProcessId = latestProcessId[0] + 1;
+            String newProcessId = UUID.randomUUID().toString();
             String name = JOptionPane.showInputDialog("Enter Resource Name");
+            if (name == null || name.isEmpty()) {return;}
+            if (process.getResources(type).stream().anyMatch(resource -> resource.getName().equals(name))) {
+                JOptionPane.showMessageDialog(this, "Resource already exists!");
+                return;
+            }
             switch (type) {
                 case Human:
                     process.addResource(new HumanResource(newProcessId, name, null,0), 1);
@@ -122,7 +127,6 @@ public class ProcessFormView extends JFrame implements Observer {
                     process.addResource(new MiscResource(newProcessId, name, 0.0), 1);
                     break;
             }
-            latestProcessId[0] = newProcessId; // Update the process ID
             tableModel.setResources(process.getResources(type));
         });
         // Create a button for removing selected rows

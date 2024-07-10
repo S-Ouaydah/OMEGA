@@ -3,12 +3,12 @@ package omega.models.resources;
 import java.io.Serializable;
 
 public abstract class Resource implements Serializable{
-    protected int id; // Unique identifier for the resource
+    protected String uid; // Unique identifier for the resource
     protected String name; // Name of the resource
     public enum resourceTypes {
-            Material(new String[]{"ID", "Name", "Unit Cost", "Quantity"}),
-            Human(new String[]{"ID", "Name", "Role", "Hourly Rate", "Hours"}),
-            Misc(new String[]{"ID", "Name", "Cost"});
+            Material(new String[]{"UID", "Name", "Unit Cost", "Quantity"}),
+            Human(new String[]{"UID", "Name", "Role", "Hourly Rate", "Hours"}),
+            Misc(new String[]{"UID", "Name", "Cost"});
             public final String[] COLUMN_NAMES;
             resourceTypes(String[] cols) {
                 this.COLUMN_NAMES = cols;
@@ -19,14 +19,14 @@ public abstract class Resource implements Serializable{
     };
 
     // Constructor
-    public Resource(int id, String name) {
-        this.id = id;
+    public Resource(String uid, String name) {
+        this.uid = uid;
         this.name = name;
     }
 
     // Getters for id and name
-    public int getId() {
-        return id;
+    public String getId() {
+        return uid;
     }
 
     public String getName() {

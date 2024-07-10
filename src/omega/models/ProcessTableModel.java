@@ -50,7 +50,7 @@ public class ProcessTableModel extends AbstractTableModel implements Observer {
             case 0:
                 return selectedRows.contains(rowIndex);
             case 1:
-                return process.getId();
+                return process.getUid();
             case 2:
                 return process.getName();
             case 3:

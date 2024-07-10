@@ -61,6 +61,9 @@ public class SimulationView extends JFrame {
         setVisible(true);
     }
     public Task getFirstTaskWithProcesses(List<Task> tasks) {
+        if (tasks.isEmpty()) {
+            return null;
+        }
         for (Task task : tasks) {
             if (!task.getProcesses().isEmpty()) {
                 return task;

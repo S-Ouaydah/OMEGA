@@ -50,6 +50,10 @@ public class MainApp extends JFrame {
         projectList.getNewButton().addActionListener(e -> {
             String projectName = JOptionPane.showInputDialog(this, "Enter project name:");
             if (projectName != null && !projectName.trim().isEmpty()) {
+                if (projectList.getListNames().contains(projectName)) {
+                    JOptionPane.showMessageDialog(this, "Project already exists!");
+                    return;
+                }
                 new ProjectFormView(new Project(projectName));
                 dispose();
             }

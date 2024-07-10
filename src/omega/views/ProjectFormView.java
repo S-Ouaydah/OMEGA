@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.UUID;
 
 
 public class ProjectFormView extends JFrame {
@@ -183,11 +184,11 @@ public class ProjectFormView extends JFrame {
         // Track the latest process ID
         int[] latestProcessId = {0};
         addRowButton.addActionListener(e -> {
-            int newProcessId = latestProcessId[0] + 1;
+            String newProcessId = UUID.randomUUID().toString();;
             String name = JOptionPane.showInputDialog("Enter Process Name");
-            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, name, "", 0, 0)));
+            if (name == null) return; // Cancel button clicked
+            ProcessFormView pv = new ProcessFormView(task.addProcess(new Process(newProcessId, name, "InProgress", 0, 0)));
 //            task.addProcess(new Process(newProcessId, "", "", 0, 0));
-            latestProcessId[0] = newProcessId; // Update the process ID
             processTableModel.selectedRows.clear();
             setVisible(false);
             pv.saveButton.addActionListener(ev -> {

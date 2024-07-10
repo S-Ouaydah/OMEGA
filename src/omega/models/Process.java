@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Observable;
 
 public class Process extends Observable implements Serializable {
-    private int id; // Unique identifier for the process
+    private String uid; // Unique identifier for the process
     private String name; // Name of the process
     private List<Resource> resources; // List of resources assigned to the process
     private double cost; // Cost of the process
@@ -25,27 +25,18 @@ public class Process extends Observable implements Serializable {
         this.status = "In Progress";
         this.duration = 0;
     }
-    public Process(int id, String name, String taskType) {
-        this.id = id;
+    public Process(String uid, String name, String status ,int duration, double cost) {
+        this.uid = uid;
         this.name = name;
         this.resources = new ArrayList<>();
-        this.cost = 0;
-        this.status = "In Progress";
-        this.duration = 0;
-        this.taskType = taskType;
-    }
-    public Process(int id, String name, String status ,int duration, double cost) {
-        this.id = id;
-        this.name = name;
-        this.resources = new ArrayList<>();
-        this.cost = 0;
-        this.status = "In Progress";
-        this.duration = 0;
+        this.cost = cost;
+        this.status = status;
+        this.duration = duration;
     }
 
     // Getters and setters for all attributes
-    public int getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
     public String getName() {
         return name;

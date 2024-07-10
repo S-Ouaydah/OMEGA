@@ -13,8 +13,8 @@ public class HumanResource extends Resource implements Serializable {
 //    public static HashMap<String,String> EmployeeRoles = new HashMap<>();
 
     // Constructor
-    public HumanResource(int id, String name, Role role, int hours) {
-        super(id, name);
+    public HumanResource(String uid, String name, Role role, int hours) {
+        super(uid, name);
         this.role = role;
         this.hours = hours;
     }

@@ -11,7 +11,7 @@ public class MaterialResource extends Resource implements Serializable {
     private int quantity; // Quantity of the material
 
     // Constructor
-    public MaterialResource(int id, String name, double unitCost) {
+    public MaterialResource(String id, String name, double unitCost) {
         super(id, name);
         this.unitCost = unitCost;
     }
